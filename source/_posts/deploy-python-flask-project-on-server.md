@@ -7,6 +7,7 @@ categories:
  - Python
 tags:
  - Python
+ - 云服务器
 ---
 
 前不久，我开发了一个python web项目，一直在自己的电脑上跑。这样本没有什么问题，但由于电脑需要24小时开启并联网，它或多或少在生活中还是给我带来了一些不便。于是我购买了一台云服务器，把它部署在上边。
@@ -202,7 +203,7 @@ tmux kill-session -t session-name  # 杀死名为session-name的会话（会话�
 
 首先打开位于/etc/mysql/mysql.conf.d/目录下的mysqld.cnf，然后用#号注释掉bind-address = 127.0.0.1那一行，从而关闭127.0.0.1对3306端口的占用。
 
-![](/img/8/1.png)
+{% asset_img 1.png %}
 
 在使用 `service mysql restart` 重启mysql服务后，3306就不再被占用。
 

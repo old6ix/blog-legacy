@@ -3,10 +3,12 @@ title: 什么是停机问题？
 date: 2019-1-18
 author: jiabh
 categories:
+ - 高中
+tags:
  - 计算理论
 ---
 
-疲于学习，好久没有更了。海淀期末刚刚结束，多一点闲暇时间，就来写一写。这篇我来浅淡一个逻辑学的问题：**停机问题(Halting Problem)**。
+疲于学习，好久没有更了。海淀期末刚刚结束，多一点闲暇时间，就来写一写。这篇我来浅淡一个逻辑学的问题：**停机问题（Halting Problem）**。
 
 第一次看到这个词，是我在高二时了解图灵机时偶然知道的，感觉很有趣，又不那么难懂，故在此分享一下。下面先来说下这个问题的内容。
 
@@ -51,7 +53,7 @@ def A(P):
 
 [On Computability Numbers, with an Application to the Entscheidungsproblem.](https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf)
 
-这类不存在一个正确的算法来解决的问题被成为**不可解问题(Undecidable Decision Problem)**。同样的问题还有[**倍立方体问题**](https://baike.baidu.com/item/%E5%80%8D%E7%AB%8B%E6%96%B9%E4%BD%93%E9%97%AE%E9%A2%98)，此问题的证明方法感兴趣的可以点击前面的超链接看一看，在此不做赘述。
+这类不存在一个正确的算法来解决的问题被成为**不可解问题（Undecidable Decision Problem）**。同样的问题还有[**倍立方体问题**](https://baike.baidu.com/item/%E5%80%8D%E7%AB%8B%E6%96%B9%E4%BD%93%E9%97%AE%E9%A2%98)，此问题的证明方法感兴趣的可以点击前面的超链接看一看，在此不做赘述。
 
 结尾懒得想，不写了:stuck_out_tongue:。Bye!
 

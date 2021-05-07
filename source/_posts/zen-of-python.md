@@ -3,7 +3,7 @@ title: 什么是“Python之禅”？
 date: 2018-09-16 21:08
 author: jiabh
 categories:
- - Python
+ - 高中
 tags:
  - Python
 ---

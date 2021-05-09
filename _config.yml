@@ -106,3 +106,16 @@ deploy:
 - type: git
   repo: git@github.com:jiabh/blog.git
   branch: gh-pages
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
+# algolia:
+#   applicationID: 0D3A5CIHMT
+#   apiKey: 930a97bc71d74c17197c5f223e635023
+#   adminApiKey: 1154d762b39637386a8f5b4f69698469
+#   indexName: hexo
+#   chunkSize: 5000

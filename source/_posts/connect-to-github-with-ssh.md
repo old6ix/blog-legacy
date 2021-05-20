@@ -8,6 +8,7 @@ tags:
  - JetBrains
  - Git
  - SSH
+ - 软件构造
 ---
 
 本文首先配置Git以在Git Bash上实现通过SSH连接GitHub，然后配置IntelliJ IDEA使其内置的优秀Git工具可以通过SSH连接并操作Git仓库。

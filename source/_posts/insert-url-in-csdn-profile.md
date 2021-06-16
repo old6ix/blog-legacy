@@ -1,5 +1,5 @@
 ---
-title: 在CSDN的个人简介处写上你的主页URL
+title: 在CSDN的个人简介中注入URL
 date: 2021-06-13
 tags:
  - 抖机灵

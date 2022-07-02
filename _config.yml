@@ -115,6 +115,20 @@ search:
   format: html
   limit: 10000
 
+feed:
+  enable: true
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content:
+  content_limit: 140
+  content_limit_delim: ' '
+  order_by: -date
+  icon: icon.png
+  autodiscovery: true
+  template:
+
 # algolia:
 #   applicationID: 0D3A5CIHMT
 #   apiKey: 930a97bc71d74c17197c5f223e635023

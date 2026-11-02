@@ -1,0 +1,30 @@
+# Recovered from the generated pages on the gh-pages branch.
+# Keep site-specific settings outside the pinned theme submodule.
+scheme: Pisces
+darkmode: true
+
+menu:
+  home: / || fa fa-home
+  categories: /categories/ || fa fa-th
+  tags: /tags/ || fa fa-tags
+  archives: /archives/ || fa fa-archive
+  about: /about/ || fa fa-user
+  rss: /atom.xml || fa fa-rss
+
+avatar:
+  url: https://avatars.githubusercontent.com/u/23132866
+
+social:
+  GitHub: https://github.com/jiabh || fab fa-github
+  E-Mail: mailto:hitjbh@outlook.com || fa fa-envelope
+
+codeblock:
+  copy_button:
+    enable: true
+    show_result: true
+
+local_search:
+  enable: true
+
+# Historical comment credentials are intentionally not restored.
+# Reconfigure and verify the service before enabling comments.

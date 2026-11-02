@@ -1,0 +1,6 @@
+# NexT is a Git submodule and resolves Hexo's transitive dependencies directly.
+nodeLinker: hoisted
+
+# hexo-util generates the syntax-highlighting aliases during installation.
+allowBuilds:
+  hexo-util: true

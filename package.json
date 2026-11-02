@@ -2,12 +2,13 @@
   "name": "hexo-site",
   "version": "0.0.0",
   "private": true,
+  "packageManager": "pnpm@12.16.1",
   "scripts": {
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "server": "hexo server",
-    "test": "npm run clean && npm run build && node --test test/site.test.cjs"
+    "test": "pnpm run clean && pnpm run build && node --test test/site.test.cjs"
   },
   "hexo": {
     "version": "8.1.2"

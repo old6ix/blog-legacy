@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.jiabh.cn/tags/</loc>
+    <loc>https://blog.jiabh.cn/categories/</loc>
     
     <lastmod>2026-11-02</lastmod>
     
@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>https://blog.jiabh.cn/categories/</loc>
+    <loc>https://blog.jiabh.cn/tags/</loc>
     
     <lastmod>2026-11-02</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://blog.jiabh.cn/2022/renpy8-released/</loc>
+    <loc>https://blog.jiabh.cn/2018/zen-of-python/</loc>
     
     <lastmod>2026-11-02</lastmod>
     
@@ -38,7 +38,7 @@
   </url>
   
   <url>
-    <loc>https://blog.jiabh.cn/2018/zen-of-python/</loc>
+    <loc>https://blog.jiabh.cn/2022/renpy8-released/</loc>
     
     <lastmod>2026-11-02</lastmod>
     
@@ -74,7 +74,7 @@
   </url>
   
   <url>
-    <loc>https://blog.jiabh.cn/2019/halting-problem/</loc>
+    <loc>https://blog.jiabh.cn/2018/infusion-bottle/</loc>
     
     <lastmod>2026-11-02</lastmod>
     
@@ -83,7 +83,7 @@
   </url>
   
   <url>
-    <loc>https://blog.jiabh.cn/2018/infusion-bottle/</loc>
+    <loc>https://blog.jiabh.cn/2019/halting-problem/</loc>
     
     <lastmod>2026-11-02</lastmod>
     
@@ -154,20 +154,6 @@
   </url>
   
   <url>
-    <loc>https://blog.jiabh.cn/tags/%E8%AE%A1%E7%AE%97%E7%90%86%E8%AE%BA/</loc>
-    <lastmod>2026-11-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.jiabh.cn/tags/%E7%89%A9%E7%90%86/</loc>
-    <lastmod>2026-11-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.jiabh.cn/tags/%E6%8A%96%E6%9C%BA%E7%81%B5/</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
@@ -176,20 +162,6 @@
   
   <url>
     <loc>https://blog.jiabh.cn/tags/%E9%BB%91%E5%AE%A2/</loc>
-    <lastmod>2026-11-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.jiabh.cn/tags/Ren-Py/</loc>
-    <lastmod>2026-11-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.jiabh.cn/tags/News/</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -209,10 +181,45 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://blog.jiabh.cn/tags/%E7%89%A9%E7%90%86/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.jiabh.cn/tags/%E8%AE%A1%E7%AE%97%E7%90%86%E8%AE%BA/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.jiabh.cn/tags/Ren-Py/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.jiabh.cn/tags/News/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
     <loc>https://blog.jiabh.cn/categories/Git/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.jiabh.cn/categories/Python/</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -227,13 +234,6 @@
   
   <url>
     <loc>https://blog.jiabh.cn/categories/VN-Engine/</loc>
-    <lastmod>2026-11-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.jiabh.cn/categories/Python/</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

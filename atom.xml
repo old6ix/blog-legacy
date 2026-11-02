@@ -1,245 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>jiabh的博客</title>
-  <icon>https://blog.jiabh.cn/icon.png</icon>
-  <subtitle>在路上</subtitle>
-  <link href="https://blog.jiabh.cn/atom.xml" rel="self"/>
-  
-  <link href="https://blog.jiabh.cn/"/>
-  <updated>2026-11-02T16:17:19.790Z</updated>
-  <id>https://blog.jiabh.cn/</id>
-  
   <author>
     <name>old6ix</name>
-    
   </author>
-  
   <generator uri="https://hexo.io/">Hexo</generator>
-  
+  <icon>https://blog.jiabh.cn/icon.png</icon>
+  <id>https://blog.jiabh.cn/</id>
+  <link href="https://blog.jiabh.cn/" rel="alternate"/>
+  <link href="https://blog.jiabh.cn/atom.xml" rel="self"/>
+  <rights>All rights reserved 2026, old6ix</rights>
+  <subtitle>在路上</subtitle>
+  <title>jiabh的博客</title>
+  <updated>2026-11-02T16:17:19.790Z</updated>
   <entry>
-    <title>看了一门AI课程，我决定开始写点东西</title>
-    <link href="https://blog.jiabh.cn/2026/start-writing-again/"/>
-    <id>https://blog.jiabh.cn/2026/start-writing-again/</id>
-    <published>2026-11-01T16:00:00.000Z</published>
-    <updated>2026-11-02T16:17:19.790Z</updated>
-    
-    
-    <summary type="html">&lt;img src=&quot;/2026/start-writing-again/cover.png&quot; class=&quot;&quot; title=&quot;我的第一篇博客&quot;&gt;
-
-&lt;p&gt;今天看了一门工业AI的概述课程，想了解一下大公司对工业AI的技术体系和实际应用的理解。课程从工业4.0、智能制造讲起，介绍了信息物理系统（Cyber-Physical System, CPS）、数字孪生等概念。看着这些熟悉的名词，我又产生了那种久违的反感。&lt;/p&gt;</summary>
-    
-    
-    
+    <author>
+      <name>old6ix</name>
+    </author>
     <category term="随笔" scheme="https://blog.jiabh.cn/categories/%E9%9A%8F%E7%AC%94/"/>
-    
-    
     <category term="AI" scheme="https://blog.jiabh.cn/tags/AI/"/>
-    
     <category term="写作" scheme="https://blog.jiabh.cn/tags/%E5%86%99%E4%BD%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Ren&#39;Py 8.0.0 发布</title>
-    <link href="https://blog.jiabh.cn/2022/renpy8-released/"/>
-    <id>https://blog.jiabh.cn/2022/renpy8-released/</id>
-    <published>2022-07-02T16:00:00.000Z</published>
-    <updated>2026-11-02T15:32:46.290Z</updated>
-    
-    
-    <summary type="html">&lt;img src=&quot;/2022/renpy8-released/renpy8_lores.png&quot; class=&quot;&quot; title=&quot;Ren&quot; alt=&quot;Py 8 Release Logo&quot;&gt;
+    <id>https://blog.jiabh.cn/2026/start-writing-again/</id>
+    <link href="https://blog.jiabh.cn/2026/start-writing-again/"/>
+    <published>2026-11-01T16:00:00.000Z</published>
+    <summary>
+      <![CDATA[<img src="/2026/start-writing-again/cover.png" class="" title="我的第一篇博客">
 
-&lt;p&gt;2022年6月26日，知名视觉小说引擎&lt;a href=&quot;https://www.renpy.org/&quot;&gt;Ren’Py&lt;/a&gt;发布大版本更新8.0.0。在发布之前，我很期待这个版本，其中最吸引我的更改是Python版本由2升3，终于抛弃早已停止更新的2.x版本。下面对几个重大更新进行整理，全部更改可见官方&lt;a href=&quot;https://www.renpy.org/doc/html/changelog.html#renpy-8-0-0&quot;&gt;Changelog&lt;/a&gt;。&lt;/p&gt;</summary>
-    
-    
-    
+<p>今天看了一门工业AI的概述课程，想了解一下大公司对工业AI的技术体系和实际应用的理解。课程从工业4.0、智能制造讲起，介绍了信息物理系统（Cyber-Physical System, CPS）、数字孪生等概念。看着这些熟悉的名词，我又产生了那种久违的反感。</p>]]>
+    </summary>
+    <title>看了一门AI课程，我决定开始写点东西</title>
+    <updated>2026-11-02T16:17:19.790Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>old6ix</name>
+    </author>
     <category term="VN Engine" scheme="https://blog.jiabh.cn/categories/VN-Engine/"/>
-    
-    
     <category term="Python" scheme="https://blog.jiabh.cn/tags/Python/"/>
-    
-    <category term="Ren&#39;Py" scheme="https://blog.jiabh.cn/tags/Ren-Py/"/>
-    
+    <category term="Ren'Py" scheme="https://blog.jiabh.cn/tags/Ren-Py/"/>
     <category term="News" scheme="https://blog.jiabh.cn/tags/News/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在CSDN的个人简介中注入URL</title>
-    <link href="https://blog.jiabh.cn/2021/insert-url-in-csdn-profile/"/>
-    <id>https://blog.jiabh.cn/2021/insert-url-in-csdn-profile/</id>
-    <published>2021-06-12T16:00:00.000Z</published>
-    <updated>2026-11-02T15:32:46.269Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;在CSDN，虽然我不发文章，只是浏览，但看到其他人用心写的文章时往往会与作者互动交流。今日突然想把博客链接放在CSDN主页上，以期望点开我主页的人能够看到我所书写的内容。然而提交时却因简介包含URL而操作失败。垃圾CSDN，简介里放URL都禁止！尝试寻找表单验证的bug，没想到真让我找到了。&lt;/p&gt;</summary>
-    
-    
-    
-    
-    <category term="抖机灵" scheme="https://blog.jiabh.cn/tags/%E6%8A%96%E6%9C%BA%E7%81%B5/"/>
-    
-    <category term="黑客" scheme="https://blog.jiabh.cn/tags/%E9%BB%91%E5%AE%A2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>将GitHub默认分支名由main更换回master</title>
-    <link href="https://blog.jiabh.cn/2021/rename-branch-from-main-to-master/"/>
-    <id>https://blog.jiabh.cn/2021/rename-branch-from-main-to-master/</id>
-    <published>2021-05-18T16:00:00.000Z</published>
-    <updated>2026-11-02T15:32:46.282Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;完成软件构造课程的实验时，我在指导手册中看到如下的一段话：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;提交到 GitHub 仓库后，TA 会读取你的 master 分支。如果你在其他分支上开发，提交前请务必将最新修改合并至 master 分支。如果实验要求你设置其他分支，也请务必将各分支指向正确的 commit，TA 根据分支名来获取你的代码。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;然而，GitHub在2020年宣布开始逐步将默认分支名由 &lt;code&gt;master&lt;/code&gt; 更改为 &lt;code&gt;main&lt;/code&gt;，该项目的官方仓库如下：&lt;a href=&quot;https://github.com/github/renaming&quot;&gt;Renaming the default branch from master&lt;/a&gt;。现在，在GitHub上创建的新仓库的默认分支名称为 &lt;code&gt;main&lt;/code&gt;。遂向老师确认是否需要将默认分支修改回 &lt;code&gt;master&lt;/code&gt;，得到了肯定的答案（&lt;a href=&quot;https://piazza.com/class/kk0jwlevju3nd?cid=9&quot;&gt;Piazza问题链接&lt;/a&gt;）。&lt;/p&gt;
-&lt;p&gt;本文记录将默认分支由 &lt;code&gt;main&lt;/code&gt; 分支修改为 &lt;code&gt;master&lt;/code&gt; 的全过程。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Git" scheme="https://blog.jiabh.cn/categories/Git/"/>
-    
-    
-    <category term="GitHub" scheme="https://blog.jiabh.cn/tags/GitHub/"/>
-    
-    <category term="Git" scheme="https://blog.jiabh.cn/tags/Git/"/>
-    
-    <category term="软件构造" scheme="https://blog.jiabh.cn/tags/%E8%BD%AF%E4%BB%B6%E6%9E%84%E9%80%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>利用SSH连接GitHub及JetBrains IDE的相应配置</title>
-    <link href="https://blog.jiabh.cn/2021/connect-to-github-with-ssh/"/>
-    <id>https://blog.jiabh.cn/2021/connect-to-github-with-ssh/</id>
-    <published>2021-05-05T16:00:00.000Z</published>
-    <updated>2026-11-02T15:32:46.260Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;本文首先配置Git以在Git Bash上实现通过SSH连接GitHub，然后配置IntelliJ IDEA使其内置的优秀Git工具可以通过SSH连接并操作Git仓库。&lt;/p&gt;
-&lt;p&gt;环境为Windows 10；Git版本2.31.1.windows.1；JetBrains IDE以IntelliJ IDEA为例，版本2021.1.1。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Git" scheme="https://blog.jiabh.cn/categories/Git/"/>
-    
-    
-    <category term="GitHub" scheme="https://blog.jiabh.cn/tags/GitHub/"/>
-    
-    <category term="JetBrains" scheme="https://blog.jiabh.cn/tags/JetBrains/"/>
-    
-    <category term="Git" scheme="https://blog.jiabh.cn/tags/Git/"/>
-    
-    <category term="SSH" scheme="https://blog.jiabh.cn/tags/SSH/"/>
-    
-    <category term="软件构造" scheme="https://blog.jiabh.cn/tags/%E8%BD%AF%E4%BB%B6%E6%9E%84%E9%80%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在云服务器上部署python项目</title>
-    <link href="https://blog.jiabh.cn/2020/deploy-python-flask-project-on-server/"/>
-    <id>https://blog.jiabh.cn/2020/deploy-python-flask-project-on-server/</id>
-    <published>2020-03-25T09:06:00.000Z</published>
-    <updated>2026-11-02T15:32:46.264Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;前不久，我开发了一个python web项目，一直在自己的电脑上跑。这样本没有什么问题，但由于电脑需要24小时开启并联网，它或多或少在生活中还是给我带来了一些不便。于是我购买了一台云服务器，把它部署在上边。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Python" scheme="https://blog.jiabh.cn/categories/Python/"/>
-    
-    
-    <category term="Python" scheme="https://blog.jiabh.cn/tags/Python/"/>
-    
-    <category term="云服务器" scheme="https://blog.jiabh.cn/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>什么是停机问题？</title>
-    <link href="https://blog.jiabh.cn/2019/halting-problem/"/>
-    <id>https://blog.jiabh.cn/2019/halting-problem/</id>
-    <published>2019-01-17T16:00:00.000Z</published>
-    <updated>2026-11-02T15:32:46.266Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;疲于学习，好久没有更了。海淀期末刚刚结束，多一点闲暇时间，就来写一写。这篇我来浅淡一个逻辑学的问题：&lt;strong&gt;停机问题（Halting Problem）&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;第一次看到这个词，是我在高二时了解图灵机时偶然知道的，感觉很有趣，又不那么难懂，故在此分享一下。下面先来说下这个问题的内容。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="高中" scheme="https://blog.jiabh.cn/categories/%E9%AB%98%E4%B8%AD/"/>
-    
-    
-    <category term="计算理论" scheme="https://blog.jiabh.cn/tags/%E8%AE%A1%E7%AE%97%E7%90%86%E8%AE%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>“输液瓶”实验</title>
-    <link href="https://blog.jiabh.cn/2018/infusion-bottle/"/>
-    <id>https://blog.jiabh.cn/2018/infusion-bottle/</id>
-    <published>2018-09-22T16:00:00.000Z</published>
-    <updated>2026-11-02T15:32:46.266Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;在刚刚结束的月考中，有这么一道题：&lt;/p&gt;
-&lt;img src=&quot;/2018/infusion-bottle/1.jpg&quot; class=&quot;&quot; title=&quot;题目描述&quot;&gt;
-
-&lt;p&gt;当时我做这道题时十分纠结，最后在AD之间选择了D。不出意外，蒙错了。这周末，老闫给我们留了这个实验作为作业，我也很好奇这其中的道理，下面我们来一探究竟。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="高中" scheme="https://blog.jiabh.cn/categories/%E9%AB%98%E4%B8%AD/"/>
-    
-    
-    <category term="物理" scheme="https://blog.jiabh.cn/tags/%E7%89%A9%E7%90%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>什么是“Python之禅”？</title>
-    <link href="https://blog.jiabh.cn/2018/zen-of-python/"/>
-    <id>https://blog.jiabh.cn/2018/zen-of-python/</id>
-    <published>2018-09-16T13:08:00.000Z</published>
+    <id>https://blog.jiabh.cn/2022/renpy8-released/</id>
+    <link href="https://blog.jiabh.cn/2022/renpy8-released/"/>
+    <published>2022-07-02T16:00:00.000Z</published>
+    <summary>
+      <![CDATA[<p><img src="/2022/renpy8-released/renpy8_lores.png" class="" title="Ren’Py 8 Release Logo"></p>
+<p>2022年6月26日，知名视觉小说引擎<a href="https://www.renpy.org/">Ren’Py</a>发布大版本更新8.0.0。在发布之前，我很期待这个版本，其中最吸引我的更改是Python版本由2升3，终于抛弃早已停止更新的2.x版本。下面对几个重大更新进行整理，全部更改可见官方<a href="https://www.renpy.org/doc/html/changelog.html#renpy-8-0-0">Changelog</a>。</p>]]>
+    </summary>
+    <title>Ren'Py 8.0.0 发布</title>
     <updated>2026-11-02T15:32:46.290Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;第一次写博客，还没想好写点儿什么，就来讲讲这个吧。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="高中" scheme="https://blog.jiabh.cn/categories/%E9%AB%98%E4%B8%AD/"/>
-    
-    
-    <category term="Python" scheme="https://blog.jiabh.cn/tags/Python/"/>
-    
   </entry>
-  
   <entry>
-    <title>正式上线！</title>
-    <link href="https://blog.jiabh.cn/2018/hello-world/"/>
-    <id>https://blog.jiabh.cn/2018/hello-world/</id>
-    <published>2018-09-08T16:00:00.000Z</published>
-    <updated>2026-11-02T15:32:46.266Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;我的博客正式上线！Hello-world&quot;&gt;&lt;a href=&quot;#我的博客正式上线！Hello-world&quot; class=&quot;headerlink&quot; title=&quot;我的博客正式上线！Hello world!&quot;&gt;&lt;/a&gt;我的博客正式上线！Hello</summary>
-        
-      
-    
-    
-    
-    
+    <author>
+      <name>old6ix</name>
+    </author>
+    <category term="抖机灵" scheme="https://blog.jiabh.cn/tags/%E6%8A%96%E6%9C%BA%E7%81%B5/"/>
+    <category term="黑客" scheme="https://blog.jiabh.cn/tags/%E9%BB%91%E5%AE%A2/"/>
+    <id>https://blog.jiabh.cn/2021/insert-url-in-csdn-profile/</id>
+    <link href="https://blog.jiabh.cn/2021/insert-url-in-csdn-profile/"/>
+    <published>2021-06-12T16:00:00.000Z</published>
+    <summary>
+      <![CDATA[<p>在CSDN，虽然我不发文章，只是浏览，但看到其他人用心写的文章时往往会与作者互动交流。今日突然想把博客链接放在CSDN主页上，以期望点开我主页的人能够看到我所书写的内容。然而提交时却因简介包含URL而操作失败。垃圾CSDN，简介里放URL都禁止！尝试寻找表单验证的bug，没想到真让我找到了。</p>]]>
+    </summary>
+    <title>在CSDN的个人简介中注入URL</title>
+    <updated>2026-11-02T15:32:46.269Z</updated>
   </entry>
-  
+  <entry>
+    <author>
+      <name>old6ix</name>
+    </author>
+    <category term="Git" scheme="https://blog.jiabh.cn/categories/Git/"/>
+    <category term="GitHub" scheme="https://blog.jiabh.cn/tags/GitHub/"/>
+    <category term="Git" scheme="https://blog.jiabh.cn/tags/Git/"/>
+    <category term="软件构造" scheme="https://blog.jiabh.cn/tags/%E8%BD%AF%E4%BB%B6%E6%9E%84%E9%80%A0/"/>
+    <id>https://blog.jiabh.cn/2021/rename-branch-from-main-to-master/</id>
+    <link href="https://blog.jiabh.cn/2021/rename-branch-from-main-to-master/"/>
+    <published>2021-05-18T16:00:00.000Z</published>
+    <summary>
+      <![CDATA[<p>完成软件构造课程的实验时，我在指导手册中看到如下的一段话：</p>
+<blockquote>
+<p>提交到 GitHub 仓库后，TA 会读取你的 master 分支。如果你在其他分支上开发，提交前请务必将最新修改合并至 master 分支。如果实验要求你设置其他分支，也请务必将各分支指向正确的 commit，TA 根据分支名来获取你的代码。</p>
+</blockquote>
+<p>然而，GitHub在2020年宣布开始逐步将默认分支名由 <code>master</code> 更改为 <code>main</code>，该项目的官方仓库如下：<a href="https://github.com/github/renaming">Renaming the default branch from master</a>。现在，在GitHub上创建的新仓库的默认分支名称为 <code>main</code>。遂向老师确认是否需要将默认分支修改回 <code>master</code>，得到了肯定的答案（<a href="https://piazza.com/class/kk0jwlevju3nd?cid=9">Piazza问题链接</a>）。</p>
+<p>本文记录将默认分支由 <code>main</code> 分支修改为 <code>master</code> 的全过程。</p>]]>
+    </summary>
+    <title>将GitHub默认分支名由main更换回master</title>
+    <updated>2026-11-02T15:32:46.282Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>old6ix</name>
+    </author>
+    <category term="Git" scheme="https://blog.jiabh.cn/categories/Git/"/>
+    <category term="GitHub" scheme="https://blog.jiabh.cn/tags/GitHub/"/>
+    <category term="JetBrains" scheme="https://blog.jiabh.cn/tags/JetBrains/"/>
+    <category term="Git" scheme="https://blog.jiabh.cn/tags/Git/"/>
+    <category term="SSH" scheme="https://blog.jiabh.cn/tags/SSH/"/>
+    <category term="软件构造" scheme="https://blog.jiabh.cn/tags/%E8%BD%AF%E4%BB%B6%E6%9E%84%E9%80%A0/"/>
+    <id>https://blog.jiabh.cn/2021/connect-to-github-with-ssh/</id>
+    <link href="https://blog.jiabh.cn/2021/connect-to-github-with-ssh/"/>
+    <published>2021-05-05T16:00:00.000Z</published>
+    <summary>
+      <![CDATA[<p>本文首先配置Git以在Git Bash上实现通过SSH连接GitHub，然后配置IntelliJ IDEA使其内置的优秀Git工具可以通过SSH连接并操作Git仓库。</p>
+<p>环境为Windows 10；Git版本2.31.1.windows.1；JetBrains IDE以IntelliJ IDEA为例，版本2021.1.1。</p>]]>
+    </summary>
+    <title>利用SSH连接GitHub及JetBrains IDE的相应配置</title>
+    <updated>2026-11-02T15:32:46.260Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>old6ix</name>
+    </author>
+    <category term="Python" scheme="https://blog.jiabh.cn/categories/Python/"/>
+    <category term="Python" scheme="https://blog.jiabh.cn/tags/Python/"/>
+    <category term="云服务器" scheme="https://blog.jiabh.cn/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    <id>https://blog.jiabh.cn/2020/deploy-python-flask-project-on-server/</id>
+    <link href="https://blog.jiabh.cn/2020/deploy-python-flask-project-on-server/"/>
+    <published>2020-03-25T09:06:00.000Z</published>
+    <summary>
+      <![CDATA[<p>前不久，我开发了一个python web项目，一直在自己的电脑上跑。这样本没有什么问题，但由于电脑需要24小时开启并联网，它或多或少在生活中还是给我带来了一些不便。于是我购买了一台云服务器，把它部署在上边。</p>]]>
+    </summary>
+    <title>在云服务器上部署python项目</title>
+    <updated>2026-11-02T15:32:46.264Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>old6ix</name>
+    </author>
+    <category term="高中" scheme="https://blog.jiabh.cn/categories/%E9%AB%98%E4%B8%AD/"/>
+    <category term="计算理论" scheme="https://blog.jiabh.cn/tags/%E8%AE%A1%E7%AE%97%E7%90%86%E8%AE%BA/"/>
+    <id>https://blog.jiabh.cn/2019/halting-problem/</id>
+    <link href="https://blog.jiabh.cn/2019/halting-problem/"/>
+    <published>2019-01-17T16:00:00.000Z</published>
+    <summary>
+      <![CDATA[<p>疲于学习，好久没有更了。海淀期末刚刚结束，多一点闲暇时间，就来写一写。这篇我来浅淡一个逻辑学的问题：<strong>停机问题（Halting Problem）</strong>。</p>
+<p>第一次看到这个词，是我在高二时了解图灵机时偶然知道的，感觉很有趣，又不那么难懂，故在此分享一下。下面先来说下这个问题的内容。</p>]]>
+    </summary>
+    <title>什么是停机问题？</title>
+    <updated>2026-11-02T15:32:46.266Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>old6ix</name>
+    </author>
+    <category term="高中" scheme="https://blog.jiabh.cn/categories/%E9%AB%98%E4%B8%AD/"/>
+    <category term="物理" scheme="https://blog.jiabh.cn/tags/%E7%89%A9%E7%90%86/"/>
+    <id>https://blog.jiabh.cn/2018/infusion-bottle/</id>
+    <link href="https://blog.jiabh.cn/2018/infusion-bottle/"/>
+    <published>2018-09-22T16:00:00.000Z</published>
+    <summary>
+      <![CDATA[<p>在刚刚结束的月考中，有这么一道题：</p>
+<img src="/2018/infusion-bottle/1.jpg" class="" title="题目描述">
+
+<p>当时我做这道题时十分纠结，最后在AD之间选择了D。不出意外，蒙错了。这周末，老闫给我们留了这个实验作为作业，我也很好奇这其中的道理，下面我们来一探究竟。</p>]]>
+    </summary>
+    <title>“输液瓶”实验</title>
+    <updated>2026-11-02T15:32:46.266Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>old6ix</name>
+    </author>
+    <category term="高中" scheme="https://blog.jiabh.cn/categories/%E9%AB%98%E4%B8%AD/"/>
+    <category term="Python" scheme="https://blog.jiabh.cn/tags/Python/"/>
+    <id>https://blog.jiabh.cn/2018/zen-of-python/</id>
+    <link href="https://blog.jiabh.cn/2018/zen-of-python/"/>
+    <published>2018-09-16T13:08:00.000Z</published>
+    <summary>
+      <![CDATA[<p>第一次写博客，还没想好写点儿什么，就来讲讲这个吧。</p>]]>
+    </summary>
+    <title>什么是“Python之禅”？</title>
+    <updated>2026-11-02T15:32:46.290Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>old6ix</name>
+    </author>
+    <id>https://blog.jiabh.cn/2018/hello-world/</id>
+    <link href="https://blog.jiabh.cn/2018/hello-world/"/>
+    <published>2018-09-08T16:00:00.000Z</published>
+    <summary>
+      <![CDATA[<h1 id="我的博客正式上线！Hello-world"><a href="#我的博客正式上线！Hello-world" class="headerlink" title="我的博客正式上线！Hello world!"></a>我的博客正式上线！Hello]]>
+    </summary>
+    <title>正式上线！</title>
+    <updated>2026-11-02T15:32:46.266Z</updated>
+  </entry>
 </feed>

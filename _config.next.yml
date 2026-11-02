@@ -1,5 +1,4 @@
-# Recovered from the generated pages on the gh-pages branch.
-# Keep site-specific settings outside the pinned theme submodule.
+# Site-specific settings for NexT 8; keep the theme submodule unmodified.
 scheme: Pisces
 darkmode: true
 
@@ -21,7 +20,6 @@ social:
 codeblock:
   copy_button:
     enable: true
-    show_result: true
 
 local_search:
   enable: true

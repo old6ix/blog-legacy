@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.jiabh.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文首先配置Git以在Git Bash上实现通过SSH连接GitHub，然后配置IntelliJ IDEA使其内置的优秀Git工具可以通过SSH连接并操作Git仓库。 环境为Windows 10；Git版本2.31.1.windows.1；JetBrains IDE以IntelliJ IDEA为例，版本2021.1.1。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用SSH连接GitHub及JetBrains IDE的相应配置">
+<meta property="og:url" content="https://blog.jiabh.cn/2021/connect-to-github-with-ssh/">
+<meta property="og:site_name" content="jiabh的博客">
+<meta property="og:description" content="本文首先配置Git以在Git Bash上实现通过SSH连接GitHub，然后配置IntelliJ IDEA使其内置的优秀Git工具可以通过SSH连接并操作Git仓库。 环境为Windows 10；Git版本2.31.1.windows.1；JetBrains IDE以IntelliJ IDEA为例，版本2021.1.1。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.jiabh.cn/2021/connect-to-github-with-ssh/add-new-ssh-key.png">
+<meta property="article:published_time" content="2021-05-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-11-02T15:32:46.260Z">
+<meta property="article:author" content="old6ix">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="JetBrains">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="SSH">
+<meta property="article:tag" content="软件构造">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.jiabh.cn/2021/connect-to-github-with-ssh/add-new-ssh-key.png">
+
+<link rel="canonical" href="https://blog.jiabh.cn/2021/connect-to-github-with-ssh/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>利用SSH连接GitHub及JetBrains IDE的相应配置 | jiabh的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="jiabh的博客" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">jiabh的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">在路上</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>rss</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.jiabh.cn/2021/connect-to-github-with-ssh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/23132866">
+      <meta itemprop="name" content="old6ix">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jiabh的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          利用SSH连接GitHub及JetBrains IDE的相应配置
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-06 00:00:00" itemprop="dateCreated datePublished" datetime="2021-05-06T00:00:00+08:00">2021-05-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-11-02 23:32:46" itemprop="dateModified" datetime="2026-11-02T23:32:46+08:00">2026-11-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文首先配置Git以在Git Bash上实现通过SSH连接GitHub，然后配置IntelliJ IDEA使其内置的优秀Git工具可以通过SSH连接并操作Git仓库。</p>
+<p>环境为Windows 10；Git版本2.31.1.windows.1；JetBrains IDE以IntelliJ IDEA为例，版本2021.1.1。</p>
+<span id="more"></span>
+
+<h1 id="通过SSH连接GitHub"><a href="#通过SSH连接GitHub" class="headerlink" title="通过SSH连接GitHub"></a>通过SSH连接GitHub</h1><p><a target="_blank" rel="noopener" href="https://docs.github.com/cn/github/authenticating-to-github/connecting-to-github-with-ssh">GitHub Docs上的这一节</a>已经说得比较详尽了，这里我结合个人的理解赘述一下。有部分可能遇到而我没有遇到的问题没有记录，如遇到可查阅官方文档。</p>
+<h2 id="为何不用用户名-密码？"><a href="#为何不用用户名-密码？" class="headerlink" title="为何不用用户名+密码？"></a>为何不用用户名+密码？</h2><p>使用ssh无需输入和传输用户名和密码，更加方便而且安全。</p>
+<h2 id="生成新的SSH秘钥"><a href="#生成新的SSH秘钥" class="headerlink" title="生成新的SSH秘钥"></a>生成新的SSH秘钥</h2><ol>
+<li><p>打开Git Bash或其它任何命令行；</p>
+</li>
+<li><p>输入以下命令（将引号中的邮箱替换为的GitHub邮箱）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;your_email@example.com&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>-t ed25519</code>表示使用Ed25519算法生成秘钥；<code>-C</code>表示注释。事实上这里的邮箱换成任意内容均可生成ssh密钥对，但GitHub会根据注释判断秘钥的拥有者，所以在此场景下需要以邮箱作为注释。</p>
+</li>
+<li><p>提示“Enter a file in which to save the key（输入要保存密钥的文件）”，输入你期望的文件名；</p>
+</li>
+<li><p>提示“Enter passphrase (empty for no passphrase)”输入两次安全密码（passphrase）。这个密码的作用就是加上额外一层验证，只有同时拥有私钥和密码才能与公钥配对。不设置也可以通过。如果设置了安全密码，则在Git Bash中的每次操作都需要输入密码；在JetBrains IDE中经过后续配置，只需要再输入一次密码即可，无需每次都输入。</p>
+</li>
+<li><p>在命令行所在目录下生成公钥（.pub后缀）和私钥（无后缀）文件。</p>
+</li>
+</ol>
+<h2 id="部署SSH-密钥"><a href="#部署SSH-密钥" class="headerlink" title="部署SSH 密钥"></a>部署SSH 密钥</h2><p>得到密钥对后，需要将公钥上传至GitHub，本地Git配置好私钥，即可在每次push和pull时验证。</p>
+<h3 id="将公钥添加到GitHub"><a href="#将公钥添加到GitHub" class="headerlink" title="将公钥添加到GitHub"></a>将公钥添加到GitHub</h3><p>进入<a target="_blank" rel="noopener" href="https://github.com/">GitHub主页</a>，单击右上角头像——Settings进入<a target="_blank" rel="noopener" href="https://github.com/settings">设置页</a>；在左侧列表中找到“SSH and GPG keys”并<a target="_blank" rel="noopener" href="https://github.com/settings/keys">进入</a>，单击右上角绿色的“New SSH key”按钮，进入下图所示<a target="_blank" rel="noopener" href="https://github.com/settings/ssh/new">页面</a>；Title处给公钥起个你喜欢的名字，用文本编辑器打开公钥文件并将内容粘贴至Key处。公钥应该是一个以“ssh-ed25519”开头、你的邮箱为结尾的一段文本，注意不要粘错。完成后单击“Add SSH key”添加公钥，完成。</p>
+<img src="/2021/connect-to-github-with-ssh/add-new-ssh-key.png" class="" title="新增SSH key页面">
+
+<h3 id="将私钥添加到-ssh-agent"><a href="#将私钥添加到-ssh-agent" class="headerlink" title="将私钥添加到 ssh-agent"></a>将私钥添加到 ssh-agent</h3><p>首先设置<a target="_blank" rel="noopener" href="https://docs.github.com/cn/github/authenticating-to-github/working-with-ssh-key-passphrases#">在Git for Windows上自动启动ssh-agent</a>，复制以下代码并将其粘贴到<code>~/.profile</code>文件中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">env</span>=~/.ssh/agent.env</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">agent_load_env</span></span> () &#123; <span class="built_in">test</span> -f <span class="string">&quot;<span class="variable">$env</span>&quot;</span> &amp;&amp; . <span class="string">&quot;<span class="variable">$env</span>&quot;</span> &gt;| /dev/null ; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">agent_start</span></span> () &#123;</span><br><span class="line">    (<span class="built_in">umask</span> 077; ssh-agent &gt;| <span class="string">&quot;<span class="variable">$env</span>&quot;</span>)</span><br><span class="line">    . <span class="built_in">env</span>=~/.ssh/agent.env</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">agent_load_env</span></span> () &#123; <span class="built_in">test</span> -f <span class="string">&quot;<span class="variable">$env</span>&quot;</span> &amp;&amp; . <span class="string">&quot;<span class="variable">$env</span>&quot;</span> &gt;| /dev/null ; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">agent_start</span></span> () &#123;</span><br><span class="line">    (<span class="built_in">umask</span> 077; ssh-agent &gt;| <span class="string">&quot;<span class="variable">$env</span>&quot;</span>)</span><br><span class="line">    . <span class="string">&quot;<span class="variable">$env</span>&quot;</span> &gt;| /dev/null ; &#125;</span><br><span class="line"></span><br><span class="line">agent_load_env</span><br><span class="line"></span><br><span class="line"><span class="comment"># agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running</span></span><br><span class="line">agent_run_state=$(ssh-add -l &gt;| /dev/null 2&gt;&amp;1; <span class="built_in">echo</span> $?)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ ! <span class="string">&quot;<span class="variable">$SSH_AUTH_SOCK</span>&quot;</span> ] || [ <span class="variable">$agent_run_state</span> = 2 ]; <span class="keyword">then</span></span><br><span class="line">    agent_start</span><br><span class="line">    ssh-add</span><br><span class="line"><span class="keyword">elif</span> [ <span class="string">&quot;<span class="variable">$SSH_AUTH_SOCK</span>&quot;</span> ] &amp;&amp; [ <span class="variable">$agent_run_state</span> = 1 ]; <span class="keyword">then</span></span><br><span class="line">    ssh-add</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">unset</span> <span class="built_in">env</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ ! <span class="string">&quot;<span class="variable">$SSH_AUTH_SOCK</span>&quot;</span> ] || [ <span class="variable">$agent_run_state</span> = 2 ]; <span class="keyword">then</span></span><br><span class="line">    agent_start</span><br><span class="line">    ssh-add</span><br><span class="line"><span class="keyword">elif</span> [ <span class="string">&quot;<span class="variable">$SSH_AUTH_SOCK</span>&quot;</span> ] &amp;&amp; [ <span class="variable">$agent_run_state</span> = 1 ]; <span class="keyword">then</span></span><br><span class="line">    ssh-add</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">unset</span> <span class="built_in">env</span></span><br></pre></td></tr></table></figure>
+
+<p>再次启动Git Bash，ssh-agent将会自动启动。如果遇到报错“unexpected end of file”，则是因为文件格式不同，需要把格式改为unix。在vim下输入命令<code>set ff=unix</code>，保存，再次启动运行正常。</p>
+<p>接下来将密钥添加到ssh-agent，输入<code>ssh-add ~/path/to/my_key</code>（填上私钥的路径），私钥也配置完成。</p>
+<h2 id="测试SSH连接"><a href="#测试SSH连接" class="headerlink" title="测试SSH连接"></a>测试SSH连接</h2><ol>
+<li>打开Git Bash；</li>
+<li>输入<code>ssh -T git@github.com</code>；</li>
+<li>如设置了passphrase会提示输入；</li>
+<li>若验证成功，则会返回类似的欢迎信息：</li>
+</ol>
+<blockquote>
+<p>Hi jiabh! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
+</blockquote>
+<p>至此，通过SSH连接GitHub的配置已经大功告成了。</p>
+<h1 id="配置IntelliJ-IDEA通过SSH操作GitHub仓库"><a href="#配置IntelliJ-IDEA通过SSH操作GitHub仓库" class="headerlink" title="配置IntelliJ IDEA通过SSH操作GitHub仓库"></a>配置IntelliJ IDEA通过SSH操作GitHub仓库</h1><p>尽管在Git Bash中已经可以正常使用，但我打开IntelliJ IDEA，发现在push时依然返回“Permission denied”的错误信息。在设置中反复寻找也没有发现设置项。经过查阅资料，我找到了不能直接使用的原因和一个可行的方法。原因将在文末给出。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ol>
+<li><p>用具有管理员权限的编辑器打开<code>C:\Program Files\Git\etc\ssh\ssh_config</code>文件；</p>
+</li>
+<li><p>在文件底部加入如下配置：</p>
+</li>
+</ol>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Host *your-gitlab-or-github-or-bitbucket-hostname*</span><br><span class="line">IdentityFile *your-ssh-rsa-privatekey-file-with-absolute-path*</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Host github.com                          # GitHub域名</span><br><span class="line">IdentityFile C:\Users\jiabh\.ssh\id_rsa  # 私钥文件的绝对路径</span><br></pre></td></tr></table></figure>
+
+<p>再次在IntelliJ IDEA中执行push动作，要求输入passphrase（还是那个密码），push成功。</p>
+<h2 id="产生原因"><a href="#产生原因" class="headerlink" title="产生原因"></a>产生原因</h2><p>IntelliJ IDEA中的Git依赖于操作系统默认的命令行程序，而起初配置好的Git Bash并非Windows下的默认命令行，cmd才是。从这个角度看，解决方法有两种：一是在cmd下设置好ssh-agent，二是在Git Bash下启动IntelliJ IDEA。前者比较繁琐，后者日常使用不太方便，因此我没有考虑。</p>
+<p>文中的方法是在<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/38105563/intellij-idea-git-permission-denied-publickey">Stack Overflow的一个问答</a>中找到的，其原理我不是很理解，设置多个Host和多个秘钥的方法我也没有进一步探索。如果日后有需要再做尝试。</p>
+<p>不过相比继续探索，我更希望JetBrains早日解决这个问题。在官方IDEs Support中有几个人提问了这个问题，但官方的人员也只给出了原因，而没有给出解决方法。这种问题与JetBrains公司的产品实在不搭。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><h2 id="通过SSH连接GitHub-1"><a href="#通过SSH连接GitHub-1" class="headerlink" title="通过SSH连接GitHub"></a>通过SSH连接GitHub</h2><p><a target="_blank" rel="noopener" href="https://docs.github.com/cn/github/authenticating-to-github/connecting-to-github-with-ssh">使用 SSH 连接到 GitHub</a></p>
+<h2 id="自启动ssh-agent时报错“unexpected-end-of-file”"><a href="#自启动ssh-agent时报错“unexpected-end-of-file”" class="headerlink" title="自启动ssh-agent时报错“unexpected end of file”"></a>自启动ssh-agent时报错“unexpected end of file”</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44297303/article/details/102956879">syntax error: unexpected end of file完美解决方案</a></p>
+<h2 id="IntelliJ-IDEA无法使用SSH连接Git"><a href="#IntelliJ-IDEA无法使用SSH连接Git" class="headerlink" title="IntelliJ IDEA无法使用SSH连接Git"></a>IntelliJ IDEA无法使用SSH连接Git</h2><p><a target="_blank" rel="noopener" href="https://intellij-support.jetbrains.com/hc/en-us/community/posts/360004124959-IntelliJ-2019-1-3-Can-t-access-git-using-SSH-keys">IntelliJ 2019.1.3 - Can’t access git using SSH keys</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/38105563/intellij-idea-git-permission-denied-publickey">IntelliJ IDEA git Permission denied (publickey)</a></p>
+<p><a target="_blank" rel="noopener" href="https://intellij-support.jetbrains.com/hc/en-us/community/posts/360007679880-How-to-add-SSH-Private-Key-to-Intellij-for-Git">How to add SSH Private Key to Intellij for Git</a></p>
+<p>对本文没有帮助，但颇有意思的链接：</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/17404165/how-to-run-a-command-on-command-prompt-startup-in-windows">如何配置cmd的“启动前执行”</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GitHub/" rel="tag"># GitHub</a>
+              <a href="/tags/JetBrains/" rel="tag"># JetBrains</a>
+              <a href="/tags/Git/" rel="tag"># Git</a>
+              <a href="/tags/SSH/" rel="tag"># SSH</a>
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E6%9E%84%E9%80%A0/" rel="tag"># 软件构造</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/deploy-python-flask-project-on-server/" rel="prev" title="在云服务器上部署python项目">
+      <i class="fa fa-chevron-left"></i> 在云服务器上部署python项目
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/rename-branch-from-main-to-master/" rel="next" title="将GitHub默认分支名由main更换回master">
+      将GitHub默认分支名由main更换回master <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E8%BF%87SSH%E8%BF%9E%E6%8E%A5GitHub"><span class="nav-number">1.</span> <span class="nav-text">通过SSH连接GitHub</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BD%95%E4%B8%8D%E7%94%A8%E7%94%A8%E6%88%B7%E5%90%8D-%E5%AF%86%E7%A0%81%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">为何不用用户名+密码？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%96%B0%E7%9A%84SSH%E7%A7%98%E9%92%A5"><span class="nav-number">1.2.</span> <span class="nav-text">生成新的SSH秘钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2SSH-%E5%AF%86%E9%92%A5"><span class="nav-number">1.3.</span> <span class="nav-text">部署SSH 密钥</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E5%85%AC%E9%92%A5%E6%B7%BB%E5%8A%A0%E5%88%B0GitHub"><span class="nav-number">1.3.1.</span> <span class="nav-text">将公钥添加到GitHub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E7%A7%81%E9%92%A5%E6%B7%BB%E5%8A%A0%E5%88%B0-ssh-agent"><span class="nav-number">1.3.2.</span> <span class="nav-text">将私钥添加到 ssh-agent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95SSH%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.4.</span> <span class="nav-text">测试SSH连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEIntelliJ-IDEA%E9%80%9A%E8%BF%87SSH%E6%93%8D%E4%BD%9CGitHub%E4%BB%93%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">配置IntelliJ IDEA通过SSH操作GitHub仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="nav-number">2.2.</span> <span class="nav-text">产生原因</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87SSH%E8%BF%9E%E6%8E%A5GitHub-1"><span class="nav-number">3.1.</span> <span class="nav-text">通过SSH连接GitHub</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%90%AF%E5%8A%A8ssh-agent%E6%97%B6%E6%8A%A5%E9%94%99%E2%80%9Cunexpected-end-of-file%E2%80%9D"><span class="nav-number">3.2.</span> <span class="nav-text">自启动ssh-agent时报错“unexpected end of file”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IntelliJ-IDEA%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8SSH%E8%BF%9E%E6%8E%A5Git"><span class="nav-number">3.3.</span> <span class="nav-text">IntelliJ IDEA无法使用SSH连接Git</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="old6ix"
+      src="https://avatars.githubusercontent.com/u/23132866">
+  <p class="site-author-name" itemprop="name">old6ix</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jiabh" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jiabh" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hitjbh@outlook.com" title="E-Mail → mailto:hitjbh@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">old6ix</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

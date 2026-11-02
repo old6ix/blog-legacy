@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.jiabh.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="在刚刚结束的月考中，有这么一道题：   当时我做这道题时十分纠结，最后在AD之间选择了D。不出意外，蒙错了。这周末，老闫给我们留了这个实验作为作业，我也很好奇这其中的道理，下面我们来一探究竟。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="“输液瓶”实验">
+<meta property="og:url" content="https://blog.jiabh.cn/2018/infusion-bottle/">
+<meta property="og:site_name" content="jiabh的博客">
+<meta property="og:description" content="在刚刚结束的月考中，有这么一道题：   当时我做这道题时十分纠结，最后在AD之间选择了D。不出意外，蒙错了。这周末，老闫给我们留了这个实验作为作业，我也很好奇这其中的道理，下面我们来一探究竟。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.jiabh.cn/2018/infusion-bottle/1.jpg">
+<meta property="og:image" content="https://blog.jiabh.cn/2018/infusion-bottle/2.jpg">
+<meta property="og:image" content="https://blog.jiabh.cn/2018/infusion-bottle/3.jpg">
+<meta property="og:image" content="https://blog.jiabh.cn/2018/infusion-bottle/4.jpg">
+<meta property="og:image" content="https://blog.jiabh.cn/2018/infusion-bottle/5.jpg">
+<meta property="og:image" content="https://blog.jiabh.cn/2018/infusion-bottle/6.png">
+<meta property="og:image" content="https://blog.jiabh.cn/2018/infusion-bottle/7.png">
+<meta property="og:image" content="https://blog.jiabh.cn/2018/infusion-bottle/8.jpg">
+<meta property="og:image" content="https://blog.jiabh.cn/2018/infusion-bottle/9.jpg">
+<meta property="article:published_time" content="2018-09-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-11-02T15:32:46.266Z">
+<meta property="article:author" content="old6ix">
+<meta property="article:tag" content="物理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.jiabh.cn/2018/infusion-bottle/1.jpg">
+
+<link rel="canonical" href="https://blog.jiabh.cn/2018/infusion-bottle/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>“输液瓶”实验 | jiabh的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="jiabh的博客" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">jiabh的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">在路上</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>rss</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.jiabh.cn/2018/infusion-bottle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/23132866">
+      <meta itemprop="name" content="old6ix">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jiabh的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          “输液瓶”实验
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-09-23 00:00:00" itemprop="dateCreated datePublished" datetime="2018-09-23T00:00:00+08:00">2018-09-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-11-02 23:32:46" itemprop="dateModified" datetime="2026-11-02T23:32:46+08:00">2026-11-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%AB%98%E4%B8%AD/" itemprop="url" rel="index"><span itemprop="name">高中</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在刚刚结束的月考中，有这么一道题：</p>
+<img src="/2018/infusion-bottle/1.jpg" class="" title="题目描述">
+
+<p>当时我做这道题时十分纠结，最后在AD之间选择了D。不出意外，蒙错了。这周末，老闫给我们留了这个实验作为作业，我也很好奇这其中的道理，下面我们来一探究竟。</p>
+<span id="more"></span>
+
+<h1 id="实验设计"><a href="#实验设计" class="headerlink" title="实验设计"></a>实验设计</h1><p>在一节百无聊赖（还差一堆作业没写）的自习课上，我设计了一下我的实验方案，如下：</p>
+<h2 id="实验器材"><a href="#实验器材" class="headerlink" title="实验器材"></a>实验器材</h2><p>矿泉水瓶x2，吸管x2，刻度尺x2。</p>
+<h2 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h2><p>我设计对选项A、C、D三种装置进行实验。</p>
+<p>对于每种装置，实验步骤如下：</p>
+<ol>
+<li>将2把刻度尺固定在合适位置上，分别用于记录水流的水平位移和瓶中水面距离平底的高度。</li>
+<li>将矿泉水瓶注满水。用手堵住吸管口，固定在桌子或其他稳定物体上。</li>
+<li>将手松开，每隔一段时间记录水流的水平位移X和瓶中水面高度H。</li>
+</ol>
+<h1 id="实验开始！"><a href="#实验开始！" class="headerlink" title="实验开始！"></a>实验开始！</h1><p>回到家，二话不说就找出了工具，在矿泉水瓶盖上打好洞，插上吸管。</p>
+<img src="/2018/infusion-bottle/2.jpg" class="">
+
+<p>测试装置</p>
+
+
+<iframe src="//player.bilibili.com/player.html?aid=32334287&cid=56572922&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+
+<p>成功！就是吸管口处有一点儿漏水。本来想用502粘上来着，但家里没有了，又懒得下楼买，所有就凑合着用了。。。</p>
+<p>接下来是最艰难的实验装置组装环节。经过了不断地调整和尝试，我用家里的东西做成了这样一个装置：</p>
+<img src="/2018/infusion-bottle/3.jpg" class="">
+
+<p>很炫酷有木有！<br>至于为什么用市尺，是因为这把尺子刻度较明显，便于记录。</p>
+<p>由于实在没法做到现场记录数据，只能先录好视频，再在电脑上读数并记录。<br>先放视频:</p>
+<h2 id="进气口在水中，低于出水口（题中C选项）"><a href="#进气口在水中，低于出水口（题中C选项）" class="headerlink" title="进气口在水中，低于出水口（题中C选项）"></a>进气口在水中，低于出水口（题中C选项）</h2><p>这个很容易想到结果，仅做定性实验。实验视频如下：</p>
+<iframe src="//player.bilibili.com/player.html?aid=32334287&cid=56573703&page=2" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h2 id="进气口在水中，高于出水口（题中A选项）"><a href="#进气口在水中，高于出水口（题中A选项）" class="headerlink" title="进气口在水中，高于出水口（题中A选项）"></a>进气口在水中，高于出水口（题中A选项）</h2><p>为了减少水的浪费，我把上一次实验流出的水收集到盆中，再灌入瓶中。因为这是物理实验，自然也要用物理的方法了。<br>我们利用虹吸现象将盆中的水移入瓶中：</p>
+<iframe src="//player.bilibili.com/player.html?aid=32334287&cid=56573756&page=3" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<p>完成！下面开始此次实验：</p>
+<iframe src="//player.bilibili.com/player.html?aid=32334287&cid=56573847&page=4" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h2 id="进气口深入瓶中顶端空气部分（题中D选项）"><a href="#进气口深入瓶中顶端空气部分（题中D选项）" class="headerlink" title="进气口深入瓶中顶端空气部分（题中D选项）"></a>进气口深入瓶中顶端空气部分（题中D选项）</h2><p>由于吸管没那么长，伸不到底部。于是我没有用进气管，而是把底给掀了。。。</p>
+<img src="/2018/infusion-bottle/4.jpg" class="">
+<p>虽然有些粗暴，但确实可以等效为D选项的装置。</p>
+<p>这里是相应视频：</p>
+<iframe src="//player.bilibili.com/player.html?aid=32334287&cid=56574078&page=5" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+# 数据记录与处理
+数据记录的方式。。。
+<img src="/2018/infusion-bottle/5.jpg" class="">
+
+<p>这个过程很麻烦。首先要用刻度尺测量每次瓶中水深和水流到达市尺上沿时的水平位移，再通过比例计算出真实数据。</p>
+<p>经过半个多小时的读数和计算，终于得到了实验数据。如下。</p>
+<h3 id="进气口在水中，高于出水口（题中A选项）-1"><a href="#进气口在水中，高于出水口（题中A选项）-1" class="headerlink" title="进气口在水中，高于出水口（题中A选项）"></a>进气口在水中，高于出水口（题中A选项）</h3><table>
+<thead>
+<tr>
+<th>水流的水平位移X(cm)</th>
+<th>水面高度H(cm)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>27.19</td>
+<td>6.31</td>
+</tr>
+<tr>
+<td>22.27</td>
+<td>6.31</td>
+</tr>
+<tr>
+<td>21.40</td>
+<td>6.31</td>
+</tr>
+<tr>
+<td>20.17</td>
+<td>6.31</td>
+</tr>
+<tr>
+<td>19.12</td>
+<td>6.22</td>
+</tr>
+<tr>
+<td>18.77</td>
+<td>6.13</td>
+</tr>
+<tr>
+<td>17.36</td>
+<td>5.78</td>
+</tr>
+<tr>
+<td>16.48</td>
+<td>5.43</td>
+</tr>
+<tr>
+<td>15.78</td>
+<td>5.26</td>
+</tr>
+<tr>
+<td>15.08</td>
+<td>5.17</td>
+</tr>
+<tr>
+<td>14.03</td>
+<td>5.26</td>
+</tr>
+<tr>
+<td>13.15</td>
+<td>5.08</td>
+</tr>
+<tr>
+<td>12.63</td>
+<td>4.91</td>
+</tr>
+<tr>
+<td>12.27</td>
+<td>4.21</td>
+</tr>
+<tr>
+<td>12.10</td>
+<td>2.45</td>
+</tr>
+<tr>
+<td>12.08</td>
+<td>1.40</td>
+</tr>
+<tr>
+<td>11.92</td>
+<td>0.00</td>
+</tr>
+</tbody></table>
+<h3 id="掀开瓶底（题中D选项）"><a href="#掀开瓶底（题中D选项）" class="headerlink" title="掀开瓶底（题中D选项）"></a>掀开瓶底（题中D选项）</h3><table>
+<thead>
+<tr>
+<th>水流的水平位移X(cm)</th>
+<th>水面高度H(cm)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>20.17</td>
+<td>8.77</td>
+</tr>
+<tr>
+<td>17.54</td>
+<td>8.24</td>
+</tr>
+<tr>
+<td>16.66</td>
+<td>8.06</td>
+</tr>
+<tr>
+<td>15.96</td>
+<td>7.89</td>
+</tr>
+<tr>
+<td>15.08</td>
+<td>7.71</td>
+</tr>
+<tr>
+<td>14.03</td>
+<td>7.54</td>
+</tr>
+<tr>
+<td>13.15</td>
+<td>7.27</td>
+</tr>
+<tr>
+<td>12.27</td>
+<td>7.01</td>
+</tr>
+<tr>
+<td>11.40</td>
+<td>6.84</td>
+</tr>
+<tr>
+<td>10.52</td>
+<td>6.66</td>
+</tr>
+<tr>
+<td>10.34</td>
+<td>0.00</td>
+</tr>
+</tbody></table>
+<p>根据平抛运动公式，在下落高度Y一定时，有：<br>$$<br>X&#x3D;vt \ ①<br>$$<br>$$<br>Y&#x3D;\frac 1 2 g t^2 \ ②<br>$$<br>联立①②有：<br>$$<br>v&#x3D;\sqrt {\frac 1 {2gY}} X<br>$$<br>因此$v \propto X$，X的变化情况可以反映v的变化情况。</p>
+<h1 id="实验数据分析"><a href="#实验数据分析" class="headerlink" title="实验数据分析"></a>实验数据分析</h1><p>首先是进气口在水中，高于出水口的情况：</p>
+<img src="/2018/infusion-bottle/6.png" class="">
+
+<p>可以看出，在水面没过进气口时，水流的水平位移X保持不变，说明水流初速度不变。<br>对于图像中水面下降而速度升高的部分，我认为是由于测量误差引起的，且升高仅0.09cm，在正常误差以内。</p>
+<p>接下来是掀开瓶底的情况：</p>
+<img src="/2018/infusion-bottle/7.png" class="">
+
+<p>可以明显看出，随着水面高度下降，水流的水平位移X逐渐下降，说明水流初速度在逐渐减小。</p>
+<p><strong>但为什么是一次函数？</strong><br>这很令我意外。为了解决这个问题，我尝试进行理论上的解释：</p>
+<p>第一次尝试：</p>
+<img src="/2018/infusion-bottle/8.jpg" class="">
+<p>如图，我采用微元法，取$\Delta$H很小的一段时间内流出的水进行研究。由于$\Delta$H很小，可以认为在这段时间内水面高度H不变。流出的水可以等效为从水面取出一层水由重力做功运动到出水口处，根据动能定理$\frac 1 2 mv^2-0&#x3D;mgH$可知，$v \propto \sqrt{H}$，与实验数据矛盾。:confused:</p>
+<p>这是我想到的第一种解释方法，但是无法解释此现象。针对这一问题目前我正在尝试发现问题并作出修改，在有新发现后会进一步完善。</p>
+<p>第二次尝试：<br>我之前的方法存在问题：在很小的一段时间中，重力并非将最高处的水做功至出水口处，故推证错误。<br>下面我采用另一种方式：</p>
+<img src="/2018/infusion-bottle/9.jpg" class="">
+
+<p>如图，取$\Delta$H很小的一段时间内流出的水进行研究。设这段水的质量为$m$，水的密度为$\rho$。根据液体压强公式$P&#x3D; \rho gH$和压强公式$P&#x3D;\frac F S$有，$F_压&#x3D;\rho gHS$。由于$\Delta$H很小，可以认为在这段时间内水面高度H不变。<br>对这段水受力分析可知，其受到重力与水的压力，合外力为$F_合&#x3D;mg+\rho gHS$。设其受力时间为t，由动量定理$F_合t &#x3D; mv-0$得，$v&#x3D;\frac {\rho gSt} {m}H + mgt$，因此$v \propto H$，与实验数据相符。</p>
+<h1 id="实验总结"><a href="#实验总结" class="headerlink" title="实验总结"></a>实验总结</h1><p>本次此次实验验证了本题中装置B不可行，验证了装置A、D的可行性以及装置A的优点和装置D的不足之处。并对装置D的实验结果进行了理论推证。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%89%A9%E7%90%86/" rel="tag"># 物理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/zen-of-python/" rel="prev" title="什么是“Python之禅”？">
+      <i class="fa fa-chevron-left"></i> 什么是“Python之禅”？
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/halting-problem/" rel="next" title="什么是停机问题？">
+      什么是停机问题？ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">实验设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%99%A8%E6%9D%90"><span class="nav-number">1.1.</span> <span class="nav-text">实验器材</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.2.</span> <span class="nav-text">实验步骤</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%BC%80%E5%A7%8B%EF%BC%81"><span class="nav-number">2.</span> <span class="nav-text">实验开始！</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E6%B0%94%E5%8F%A3%E5%9C%A8%E6%B0%B4%E4%B8%AD%EF%BC%8C%E4%BD%8E%E4%BA%8E%E5%87%BA%E6%B0%B4%E5%8F%A3%EF%BC%88%E9%A2%98%E4%B8%ADC%E9%80%89%E9%A1%B9%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">进气口在水中，低于出水口（题中C选项）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E6%B0%94%E5%8F%A3%E5%9C%A8%E6%B0%B4%E4%B8%AD%EF%BC%8C%E9%AB%98%E4%BA%8E%E5%87%BA%E6%B0%B4%E5%8F%A3%EF%BC%88%E9%A2%98%E4%B8%ADA%E9%80%89%E9%A1%B9%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">进气口在水中，高于出水口（题中A选项）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E6%B0%94%E5%8F%A3%E6%B7%B1%E5%85%A5%E7%93%B6%E4%B8%AD%E9%A1%B6%E7%AB%AF%E7%A9%BA%E6%B0%94%E9%83%A8%E5%88%86%EF%BC%88%E9%A2%98%E4%B8%ADD%E9%80%89%E9%A1%B9%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">进气口深入瓶中顶端空气部分（题中D选项）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E6%B0%94%E5%8F%A3%E5%9C%A8%E6%B0%B4%E4%B8%AD%EF%BC%8C%E9%AB%98%E4%BA%8E%E5%87%BA%E6%B0%B4%E5%8F%A3%EF%BC%88%E9%A2%98%E4%B8%ADA%E9%80%89%E9%A1%B9%EF%BC%89-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">进气口在水中，高于出水口（题中A选项）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%80%E5%BC%80%E7%93%B6%E5%BA%95%EF%BC%88%E9%A2%98%E4%B8%ADD%E9%80%89%E9%A1%B9%EF%BC%89"><span class="nav-number">2.3.2.</span> <span class="nav-text">掀开瓶底（题中D选项）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">实验数据分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">实验总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="old6ix"
+      src="https://avatars.githubusercontent.com/u/23132866">
+  <p class="site-author-name" itemprop="name">old6ix</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jiabh" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jiabh" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hitjbh@outlook.com" title="E-Mail → mailto:hitjbh@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">old6ix</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

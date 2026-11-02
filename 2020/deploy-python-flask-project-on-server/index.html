@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.jiabh.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前不久，我开发了一个python web项目，一直在自己的电脑上跑。这样本没有什么问题，但由于电脑需要24小时开启并联网，它或多或少在生活中还是给我带来了一些不便。于是我购买了一台云服务器，把它部署在上边。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在云服务器上部署python项目">
+<meta property="og:url" content="https://blog.jiabh.cn/2020/deploy-python-flask-project-on-server/">
+<meta property="og:site_name" content="jiabh的博客">
+<meta property="og:description" content="前不久，我开发了一个python web项目，一直在自己的电脑上跑。这样本没有什么问题，但由于电脑需要24小时开启并联网，它或多或少在生活中还是给我带来了一些不便。于是我购买了一台云服务器，把它部署在上边。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.jiabh.cn/2020/deploy-python-flask-project-on-server/1.png">
+<meta property="article:published_time" content="2020-03-25T09:06:00.000Z">
+<meta property="article:modified_time" content="2026-11-02T15:32:46.264Z">
+<meta property="article:author" content="old6ix">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="云服务器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.jiabh.cn/2020/deploy-python-flask-project-on-server/1.png">
+
+<link rel="canonical" href="https://blog.jiabh.cn/2020/deploy-python-flask-project-on-server/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>在云服务器上部署python项目 | jiabh的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="jiabh的博客" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">jiabh的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">在路上</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>rss</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.jiabh.cn/2020/deploy-python-flask-project-on-server/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/23132866">
+      <meta itemprop="name" content="old6ix">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jiabh的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在云服务器上部署python项目
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-25 17:06:00" itemprop="dateCreated datePublished" datetime="2020-03-25T17:06:00+08:00">2020-03-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-11-02 23:32:46" itemprop="dateModified" datetime="2026-11-02T23:32:46+08:00">2026-11-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前不久，我开发了一个python web项目，一直在自己的电脑上跑。这样本没有什么问题，但由于电脑需要24小时开启并联网，它或多或少在生活中还是给我带来了一些不便。于是我购买了一台云服务器，把它部署在上边。</p>
+<span id="more"></span>
+
+<p>项目依赖：python3.7，MySQL 8.0</p>
+<p>操作系统：本地win10，云服务器Ubuntu Server 18 LTS</p>
+<h1 id="部署过程"><a href="#部署过程" class="headerlink" title="部署过程"></a>部署过程</h1><p>部署主要分为三步：首先把本地的项目文件发送到服务器上，然后在服务器配置好运行环境，最后在服务器运行起服务。</p>
+<h2 id="发送项目相关文件到服务器"><a href="#发送项目相关文件到服务器" class="headerlink" title="发送项目相关文件到服务器"></a>发送项目相关文件到服务器</h2><p>首先简要介绍<code>scp</code>命令：</p>
+<p>cp —— 在同一台电脑上、不同的目录之间copy文件。不能跨机拷贝。</p>
+<p>scp —— secure copy的简写，用于远程拷贝文件。基于ssh登录进行加密传输。</p>
+<p>复制<strong>本地</strong>文件到<strong>远程机器</strong>指定目录（如果复制目录，加上参数 -r ）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -rp /path/filename username@remoteIP:/path</span><br></pre></td></tr></table></figure>
+<p>复制<strong>远程机器</strong>文件到<strong>本地</strong>指定目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -rp username@remoteIP:/path/filename /path</span><br></pre></td></tr></table></figure>
+
+
+
+<p>通过scp命令，便可以在本地与服务器之间自由地传输文件。将项目相关的文件全部发送至云服务器即可。</p>
+<h2 id="在服务器配置python环境"><a href="#在服务器配置python环境" class="headerlink" title="在服务器配置python环境"></a>在服务器配置python环境</h2><p>为了方便管理项目，需要先在服务器创建一个独立的python环境。我这里使用<code>virtualenv</code>。</p>
+<h3 id="安装virtualenv"><a href="#安装virtualenv" class="headerlink" title="安装virtualenv"></a>安装virtualenv</h3><p>直接使用<code>pip</code>工具安装即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install virtualenv</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="创建新的python环境"><a href="#创建新的python环境" class="headerlink" title="创建新的python环境"></a>创建新的python环境</h3><p>通过virtualenv创建的环境将独立地存在于指定的一个文件夹中。</p>
+<p>我需要新建一个python3.7的环境，因此，cd到目标目录下，执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">virtualenv TEST --python=python3.7</span><br></pre></td></tr></table></figure>
+
+<p>执行完毕，就会在当前目录下出现一个TEST文件夹，里面存放着这整个环境。</p>
+<h3 id="安装项目依赖的包"><a href="#安装项目依赖的包" class="headerlink" title="安装项目依赖的包"></a>安装项目依赖的包</h3><p>由于我的项目依赖的包全部可以从pip安装，因此只需要先在本地生成requirements.txt，然后在服务器上导入，安装十分方便。</p>
+<p>生成本地包环境至requirements.txt文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p>根据requirements.txt文件进行包安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+
+
+<p>先在本地环境中运行生成requirements.txt文件，然后将requirements.txt上传至服务器，最后在刚刚使用virtualenv创建的python环境下进行包安装，即可自动下载安装项目所依赖的包。如此，完美迁移项目运行环境。</p>
+<h2 id="在服务器上配置MySQL"><a href="#在服务器上配置MySQL" class="headerlink" title="在服务器上配置MySQL"></a>在服务器上配置MySQL</h2><h3 id="安装MySQL"><a href="#安装MySQL" class="headerlink" title="安装MySQL"></a>安装MySQL</h3><p>我这里直接使用 <code>apt install mysql-server</code> 在服务器上安装MySQL。注意这个命令默认安装的是MySQL 5.7，而我本地使用的是MySQL 8.0。我在服务器上配置好后才发现这个问题，不过由于程序仍然可以运行，就没有再改。之后会考虑重新安装并配置MySQL 8.0。</p>
+<h3 id="设置密码"><a href="#设置密码" class="headerlink" title="设置密码"></a>设置密码</h3><p>MySQL 5.7的安装过程中没有要求输入root密码，但安装后登录mysql时又要求输入密码，这是MySQL 5.7的一个坑点。在第一次登录前需要使用 <code>mysqladmin</code> 命令设置root密码（例如设置密码为123456）：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqladmin -u root password 123456</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="迁移本地MySQL数据库至服务器"><a href="#迁移本地MySQL数据库至服务器" class="headerlink" title="迁移本地MySQL数据库至服务器"></a>迁移本地MySQL数据库至服务器</h3><p>迁移数据库需要三个步骤：</p>
+<p>1、使用 <code>mysqldump</code> 命令导出本地数据库的全部数据至一个.sql文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -u root -p db_name &gt; C:\path\filename.sql</span><br></pre></td></tr></table></figure>
+
+<p>执行命令，输入密码后即可在相应路径下找到filename.sql文件。</p>
+<p>2、创建一个新的数据库。</p>
+<p>登录到服务器上的MySQL数据库root账户，用 <code>CREATE DATABASE db_name;</code> 创建名为db_name的数据库。</p>
+<p>3、将.sql文件发送到服务器上并导入db_name数据库。</p>
+<p>仍然使用scp命令发送至服务器。导入数据库的命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p db_name &lt; C:\path\filename.sql</span><br></pre></td></tr></table></figure>
+
+<p>输入密码后，数据库导入成功。</p>
+<h2 id="在服务器上长时间运行程序"><a href="#在服务器上长时间运行程序" class="headerlink" title="在服务器上长时间运行程序"></a>在服务器上长时间运行程序</h2><p>为了让程序不会在我们与服务器断开连接后自动停止，需要让程序在后台运行。可以选择nohup，不过我这里使用Linux上强大的终端复用工具tmux。</p>
+<h3 id="tmux-简介"><a href="#tmux-简介" class="headerlink" title="tmux 简介"></a>tmux 简介</h3><p>tmux 这一名字来源于终端（terminal）复用器（muxer），它可以将一个终端会话分成多个会话。与nohup不同，tmux不仅仅在后台创造一个进程来运行指定命令，而是创造了一个进程来运行终端会话，并让命令在此终端中运行。这个会话可以被接入和断开，并且在断开后仍然保持运行，直到会话被终止。</p>
+<h3 id="tmux-简单使用"><a href="#tmux-简单使用" class="headerlink" title="tmux 简单使用"></a>tmux 简单使用</h3><p>使用下面的命令即可创造一个名为session-name的会话：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux new -s session-name</span><br></pre></td></tr></table></figure>
+
+<p>管理终端会话的相关命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tmux ls  # 显示当前所有的会话</span><br><span class="line"></span><br><span class="line">tmux a  # 接入第一个可用的会话</span><br><span class="line">tmux a -t session-name  # 接入名为session-name的会话</span><br><span class="line"></span><br><span class="line">tmux detach  # 断开当前接入的会话（会话仍然运行）</span><br><span class="line"></span><br><span class="line">tmux kill-session -t session-name  # 杀死名为session-name的会话（会话终止）</span><br></pre></td></tr></table></figure>
+
+<p>如果想要在会话进程阻塞的情况下断开会话，可以先按下 Ctrl+b，然后按 d 即可断开连接。</p>
+<p>使用 tmux 创建一个新的会话，并在这个会话中运行需要部署的python程序，然后断开连接，服务便可以一直运行下去。</p>
+<h1 id="后续配置"><a href="#后续配置" class="headerlink" title="后续配置"></a>后续配置</h1><p>至此，项目已经成功部署到云服务器上。为了后续维护方便，我又进行了一些配置。</p>
+<h2 id="MySQL开启远程访问"><a href="#MySQL开启远程访问" class="headerlink" title="MySQL开启远程访问"></a>MySQL开启远程访问</h2><p>默认情况下，MySQL数据库至可以在本地访问，无法远程访问。为了便于管理服务器上的数据，我开启了远程访问的功能。</p>
+<h3 id="打开3306端口"><a href="#打开3306端口" class="headerlink" title="打开3306端口"></a>打开3306端口</h3><p>首先打开位于&#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;目录下的mysqld.cnf，然后用#号注释掉bind-address &#x3D; 127.0.0.1那一行，从而关闭127.0.0.1对3306端口的占用。</p>
+<img src="/2020/deploy-python-flask-project-on-server/1.png" class="">
+
+<p>在使用 <code>service mysql restart</code> 重启mysql服务后，3306就不再被占用。</p>
+<h3 id="给MySQL添加授权远程访问的账户"><a href="#给MySQL添加授权远程访问的账户" class="headerlink" title="给MySQL添加授权远程访问的账户"></a>给MySQL添加授权远程访问的账户</h3><p>登录mysql，然后执行如下命令即可添加一个可以由所有IP（’%’代表所有IP，也可以指定）远程访问的root账户：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grant all privileges on *.* TO &#x27;root&#x27;@&#x27;%&#x27; identified by &#x27;密码&#x27; with grant option;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+
+<p>执行过后，可以打开mysql数据库下的user表中确认：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use mysql;</span><br><span class="line">select host, user from user;</span><br></pre></td></tr></table></figure>
+
+<p>如果有host值为%、user值为root的一行，则说明添加成功。如此便可以远程登录mysql。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/351415307/answer/862575956">pycharm安装了很多第三方库能不能直接导出到第二台电脑,不然换台电脑又是下载半天必用的库? - 程序员小贤的回答 - 知乎</a></p>
+<p><a target="_blank" rel="noopener" href="https://yq.aliyun.com/articles/187420">Linux下使用tmux打造更强大的终端</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/MAOJG/article/details/79018764">在服务器上长时间运行程序的一些基本命令</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/young233/p/10829000.html">mysql远程登陆</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ding_312/article/details/81023483">MySQL在腾讯云中设置开启3306端口</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Session_XQQ/article/details/78998798">如何使用DataGrip导出整个数据库到一个.sql文件</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag"># 云服务器</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/halting-problem/" rel="prev" title="什么是停机问题？">
+      <i class="fa fa-chevron-left"></i> 什么是停机问题？
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/connect-to-github-with-ssh/" rel="next" title="利用SSH连接GitHub及JetBrains IDE的相应配置">
+      利用SSH连接GitHub及JetBrains IDE的相应配置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E8%BF%87%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">部署过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">1.1.</span> <span class="nav-text">发送项目相关文件到服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AEpython%E7%8E%AF%E5%A2%83"><span class="nav-number">1.2.</span> <span class="nav-text">在服务器配置python环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85virtualenv"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装virtualenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84python%E7%8E%AF%E5%A2%83"><span class="nav-number">1.2.2.</span> <span class="nav-text">创建新的python环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%A1%B9%E7%9B%AE%E4%BE%9D%E8%B5%96%E7%9A%84%E5%8C%85"><span class="nav-number">1.2.3.</span> <span class="nav-text">安装项目依赖的包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%85%8D%E7%BD%AEMySQL"><span class="nav-number">1.3.</span> <span class="nav-text">在服务器上配置MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85MySQL"><span class="nav-number">1.3.1.</span> <span class="nav-text">安装MySQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%AF%86%E7%A0%81"><span class="nav-number">1.3.2.</span> <span class="nav-text">设置密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E6%9C%AC%E5%9C%B0MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E8%87%B3%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">1.3.3.</span> <span class="nav-text">迁移本地MySQL数据库至服务器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%95%BF%E6%97%B6%E9%97%B4%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.4.</span> <span class="nav-text">在服务器上长时间运行程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tmux-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.4.1.</span> <span class="nav-text">tmux 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tmux-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8"><span class="nav-number">1.4.2.</span> <span class="nav-text">tmux 简单使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">后续配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE"><span class="nav-number">2.1.</span> <span class="nav-text">MySQL开启远程访问</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%BC%803306%E7%AB%AF%E5%8F%A3"><span class="nav-number">2.1.1.</span> <span class="nav-text">打开3306端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%99MySQL%E6%B7%BB%E5%8A%A0%E6%8E%88%E6%9D%83%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%A6%E6%88%B7"><span class="nav-number">2.1.2.</span> <span class="nav-text">给MySQL添加授权远程访问的账户</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="old6ix"
+      src="https://avatars.githubusercontent.com/u/23132866">
+  <p class="site-author-name" itemprop="name">old6ix</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jiabh" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jiabh" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hitjbh@outlook.com" title="E-Mail → mailto:hitjbh@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">old6ix</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

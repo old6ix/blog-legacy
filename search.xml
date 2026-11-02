@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>正式上线！</title>
+    <url>/2018/hello-world/</url>
+    <content><![CDATA[<h1 id="我的博客正式上线！Hello-world"><a href="#我的博客正式上线！Hello-world" class="headerlink" title="我的博客正式上线！Hello world!"></a>我的博客正式上线！Hello world!</h1>]]></content>
+  </entry>
+  <entry>
+    <title>利用SSH连接GitHub及JetBrains IDE的相应配置</title>
+    <url>/2021/connect-to-github-with-ssh/</url>
+    <content><![CDATA[<p>本文首先配置Git以在Git Bash上实现通过SSH连接GitHub，然后配置IntelliJ IDEA使其内置的优秀Git工具可以通过SSH连接并操作Git仓库。</p>
+<p>环境为Windows 10；Git版本2.31.1.windows.1；JetBrains IDE以IntelliJ IDEA为例，版本2021.1.1。</p>
+<span id="more"></span>
+
+<h1 id="通过SSH连接GitHub"><a href="#通过SSH连接GitHub" class="headerlink" title="通过SSH连接GitHub"></a>通过SSH连接GitHub</h1><p><a href="https://docs.github.com/cn/github/authenticating-to-github/connecting-to-github-with-ssh">GitHub Docs上的这一节</a>已经说得比较详尽了，这里我结合个人的理解赘述一下。有部分可能遇到而我没有遇到的问题没有记录，如遇到可查阅官方文档。</p>
+<h2 id="为何不用用户名-密码？"><a href="#为何不用用户名-密码？" class="headerlink" title="为何不用用户名+密码？"></a>为何不用用户名+密码？</h2><p>使用ssh无需输入和传输用户名和密码，更加方便而且安全。</p>
+<h2 id="生成新的SSH秘钥"><a href="#生成新的SSH秘钥" class="headerlink" title="生成新的SSH秘钥"></a>生成新的SSH秘钥</h2><ol>
+<li><p>打开Git Bash或其它任何命令行；</p>
+</li>
+<li><p>输入以下命令（将引号中的邮箱替换为的GitHub邮箱）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;your_email@example.com&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>-t ed25519</code>表示使用Ed25519算法生成秘钥；<code>-C</code>表示注释。事实上这里的邮箱换成任意内容均可生成ssh密钥对，但GitHub会根据注释判断秘钥的拥有者，所以在此场景下需要以邮箱作为注释。</p>
+</li>
+<li><p>提示“Enter a file in which to save the key（输入要保存密钥的文件）”，输入你期望的文件名；</p>
+</li>
+<li><p>提示“Enter passphrase (empty for no passphrase)”输入两次安全密码（passphrase）。这个密码的作用就是加上额外一层验证，只有同时拥有私钥和密码才能与公钥配对。不设置也可以通过。如果设置了安全密码，则在Git Bash中的每次操作都需要输入密码；在JetBrains IDE中经过后续配置，只需要再输入一次密码即可，无需每次都输入。</p>
+</li>
+<li><p>在命令行所在目录下生成公钥（.pub后缀）和私钥（无后缀）文件。</p>
+</li>
+</ol>
+<h2 id="部署SSH-密钥"><a href="#部署SSH-密钥" class="headerlink" title="部署SSH 密钥"></a>部署SSH 密钥</h2><p>得到密钥对后，需要将公钥上传至GitHub，本地Git配置好私钥，即可在每次push和pull时验证。</p>
+<h3 id="将公钥添加到GitHub"><a href="#将公钥添加到GitHub" class="headerlink" title="将公钥添加到GitHub"></a>将公钥添加到GitHub</h3><p>进入<a href="https://github.com/">GitHub主页</a>，单击右上角头像——Settings进入<a href="https://github.com/settings">设置页</a>；在左侧列表中找到“SSH and GPG keys”并<a href="https://github.com/settings/keys">进入</a>，单击右上角绿色的“New SSH key”按钮，进入下图所示<a href="https://github.com/settings/ssh/new">页面</a>；Title处给公钥起个你喜欢的名字，用文本编辑器打开公钥文件并将内容粘贴至Key处。公钥应该是一个以“ssh-ed25519”开头、你的邮箱为结尾的一段文本，注意不要粘错。完成后单击“Add SSH key”添加公钥，完成。</p>
+<img src="/2021/connect-to-github-with-ssh/add-new-ssh-key.png" class="" title="新增SSH key页面">
+
+<h3 id="将私钥添加到-ssh-agent"><a href="#将私钥添加到-ssh-agent" class="headerlink" title="将私钥添加到 ssh-agent"></a>将私钥添加到 ssh-agent</h3><p>首先设置<a href="https://docs.github.com/cn/github/authenticating-to-github/working-with-ssh-key-passphrases#">在Git for Windows上自动启动ssh-agent</a>，复制以下代码并将其粘贴到<code>~/.profile</code>文件中：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">env</span>=~/.ssh/agent.env</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">agent_load_env</span></span> () &#123; <span class="built_in">test</span> -f <span class="string">&quot;<span class="variable">$env</span>&quot;</span> &amp;&amp; . <span class="string">&quot;<span class="variable">$env</span>&quot;</span> &gt;| /dev/null ; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">agent_start</span></span> () &#123;</span><br><span class="line">    (<span class="built_in">umask</span> 077; ssh-agent &gt;| <span class="string">&quot;<span class="variable">$env</span>&quot;</span>)</span><br><span class="line">    . <span class="built_in">env</span>=~/.ssh/agent.env</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">agent_load_env</span></span> () &#123; <span class="built_in">test</span> -f <span class="string">&quot;<span class="variable">$env</span>&quot;</span> &amp;&amp; . <span class="string">&quot;<span class="variable">$env</span>&quot;</span> &gt;| /dev/null ; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">agent_start</span></span> () &#123;</span><br><span class="line">    (<span class="built_in">umask</span> 077; ssh-agent &gt;| <span class="string">&quot;<span class="variable">$env</span>&quot;</span>)</span><br><span class="line">    . <span class="string">&quot;<span class="variable">$env</span>&quot;</span> &gt;| /dev/null ; &#125;</span><br><span class="line"></span><br><span class="line">agent_load_env</span><br><span class="line"></span><br><span class="line"><span class="comment"># agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running</span></span><br><span class="line">agent_run_state=$(ssh-add -l &gt;| /dev/null 2&gt;&amp;1; <span class="built_in">echo</span> $?)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ ! <span class="string">&quot;<span class="variable">$SSH_AUTH_SOCK</span>&quot;</span> ] || [ <span class="variable">$agent_run_state</span> = 2 ]; <span class="keyword">then</span></span><br><span class="line">    agent_start</span><br><span class="line">    ssh-add</span><br><span class="line"><span class="keyword">elif</span> [ <span class="string">&quot;<span class="variable">$SSH_AUTH_SOCK</span>&quot;</span> ] &amp;&amp; [ <span class="variable">$agent_run_state</span> = 1 ]; <span class="keyword">then</span></span><br><span class="line">    ssh-add</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">unset</span> <span class="built_in">env</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ ! <span class="string">&quot;<span class="variable">$SSH_AUTH_SOCK</span>&quot;</span> ] || [ <span class="variable">$agent_run_state</span> = 2 ]; <span class="keyword">then</span></span><br><span class="line">    agent_start</span><br><span class="line">    ssh-add</span><br><span class="line"><span class="keyword">elif</span> [ <span class="string">&quot;<span class="variable">$SSH_AUTH_SOCK</span>&quot;</span> ] &amp;&amp; [ <span class="variable">$agent_run_state</span> = 1 ]; <span class="keyword">then</span></span><br><span class="line">    ssh-add</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">unset</span> <span class="built_in">env</span></span><br></pre></td></tr></table></figure>
+
+<p>再次启动Git Bash，ssh-agent将会自动启动。如果遇到报错“unexpected end of file”，则是因为文件格式不同，需要把格式改为unix。在vim下输入命令<code>set ff=unix</code>，保存，再次启动运行正常。</p>
+<p>接下来将密钥添加到ssh-agent，输入<code>ssh-add ~/path/to/my_key</code>（填上私钥的路径），私钥也配置完成。</p>
+<h2 id="测试SSH连接"><a href="#测试SSH连接" class="headerlink" title="测试SSH连接"></a>测试SSH连接</h2><ol>
+<li>打开Git Bash；</li>
+<li>输入<code>ssh -T git@github.com</code>；</li>
+<li>如设置了passphrase会提示输入；</li>
+<li>若验证成功，则会返回类似的欢迎信息：</li>
+</ol>
+<blockquote>
+<p>Hi jiabh! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
+</blockquote>
+<p>至此，通过SSH连接GitHub的配置已经大功告成了。</p>
+<h1 id="配置IntelliJ-IDEA通过SSH操作GitHub仓库"><a href="#配置IntelliJ-IDEA通过SSH操作GitHub仓库" class="headerlink" title="配置IntelliJ IDEA通过SSH操作GitHub仓库"></a>配置IntelliJ IDEA通过SSH操作GitHub仓库</h1><p>尽管在Git Bash中已经可以正常使用，但我打开IntelliJ IDEA，发现在push时依然返回“Permission denied”的错误信息。在设置中反复寻找也没有发现设置项。经过查阅资料，我找到了不能直接使用的原因和一个可行的方法。原因将在文末给出。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ol>
+<li><p>用具有管理员权限的编辑器打开<code>C:\Program Files\Git\etc\ssh\ssh_config</code>文件；</p>
+</li>
+<li><p>在文件底部加入如下配置：</p>
+</li>
+</ol>
+   <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host *your-gitlab-or-github-or-bitbucket-hostname*</span><br><span class="line">IdentityFile *your-ssh-rsa-privatekey-file-with-absolute-path*</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com                          # GitHub域名</span><br><span class="line">IdentityFile C:\Users\jiabh\.ssh\id_rsa  # 私钥文件的绝对路径</span><br></pre></td></tr></table></figure>
+
+<p>再次在IntelliJ IDEA中执行push动作，要求输入passphrase（还是那个密码），push成功。</p>
+<h2 id="产生原因"><a href="#产生原因" class="headerlink" title="产生原因"></a>产生原因</h2><p>IntelliJ IDEA中的Git依赖于操作系统默认的命令行程序，而起初配置好的Git Bash并非Windows下的默认命令行，cmd才是。从这个角度看，解决方法有两种：一是在cmd下设置好ssh-agent，二是在Git Bash下启动IntelliJ IDEA。前者比较繁琐，后者日常使用不太方便，因此我没有考虑。</p>
+<p>文中的方法是在<a href="https://stackoverflow.com/questions/38105563/intellij-idea-git-permission-denied-publickey">Stack Overflow的一个问答</a>中找到的，其原理我不是很理解，设置多个Host和多个秘钥的方法我也没有进一步探索。如果日后有需要再做尝试。</p>
+<p>不过相比继续探索，我更希望JetBrains早日解决这个问题。在官方IDEs Support中有几个人提问了这个问题，但官方的人员也只给出了原因，而没有给出解决方法。这种问题与JetBrains公司的产品实在不搭。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><h2 id="通过SSH连接GitHub-1"><a href="#通过SSH连接GitHub-1" class="headerlink" title="通过SSH连接GitHub"></a>通过SSH连接GitHub</h2><p><a href="https://docs.github.com/cn/github/authenticating-to-github/connecting-to-github-with-ssh">使用 SSH 连接到 GitHub</a></p>
+<h2 id="自启动ssh-agent时报错“unexpected-end-of-file”"><a href="#自启动ssh-agent时报错“unexpected-end-of-file”" class="headerlink" title="自启动ssh-agent时报错“unexpected end of file”"></a>自启动ssh-agent时报错“unexpected end of file”</h2><p><a href="https://blog.csdn.net/weixin_44297303/article/details/102956879">syntax error: unexpected end of file完美解决方案</a></p>
+<h2 id="IntelliJ-IDEA无法使用SSH连接Git"><a href="#IntelliJ-IDEA无法使用SSH连接Git" class="headerlink" title="IntelliJ IDEA无法使用SSH连接Git"></a>IntelliJ IDEA无法使用SSH连接Git</h2><p><a href="https://intellij-support.jetbrains.com/hc/en-us/community/posts/360004124959-IntelliJ-2019-1-3-Can-t-access-git-using-SSH-keys">IntelliJ 2019.1.3 - Can’t access git using SSH keys</a></p>
+<p><a href="https://stackoverflow.com/questions/38105563/intellij-idea-git-permission-denied-publickey">IntelliJ IDEA git Permission denied (publickey)</a></p>
+<p><a href="https://intellij-support.jetbrains.com/hc/en-us/community/posts/360007679880-How-to-add-SSH-Private-Key-to-Intellij-for-Git">How to add SSH Private Key to Intellij for Git</a></p>
+<p>对本文没有帮助，但颇有意思的链接：</p>
+<p><a href="https://stackoverflow.com/questions/17404165/how-to-run-a-command-on-command-prompt-startup-in-windows">如何配置cmd的“启动前执行”</a></p>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>JetBrains</tag>
+        <tag>Git</tag>
+        <tag>SSH</tag>
+        <tag>软件构造</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>什么是停机问题？</title>
+    <url>/2019/halting-problem/</url>
+    <content><![CDATA[<p>疲于学习，好久没有更了。海淀期末刚刚结束，多一点闲暇时间，就来写一写。这篇我来浅淡一个逻辑学的问题：<strong>停机问题（Halting Problem）</strong>。</p>
+<p>第一次看到这个词，是我在高二时了解图灵机时偶然知道的，感觉很有趣，又不那么难懂，故在此分享一下。下面先来说下这个问题的内容。</p>
+<span id="more"></span>
+
+<h1 id="什么是停机问题？"><a href="#什么是停机问题？" class="headerlink" title="什么是停机问题？"></a>什么是停机问题？</h1><p>停机问题是指是否存在一个通用的程序H，输入一个程序P，H能够在有限的时间内输出给定的程序P是否会陷入死循环，即是否能在有限时间内运行结束。</p>
+<h1 id="证明过程"><a href="#证明过程" class="headerlink" title="证明过程"></a>证明过程</h1><p>先说答案：不存在。</p>
+<p>证明：</p>
+<p>假设有一个程序H(Halting简写)能够解决停机问题。即输入一个程序P(Program简写)，H能在有限时间内返回程序P是否能停机，能停机返回True，不能返回False。伪代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">H</span>(<span class="params">P</span>):</span><br><span class="line">     <span class="keyword">if</span> P能停机:</span><br><span class="line">         <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">         <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<p>那么我们就也能编写出一个这样的程序，命名为A(Anti简写)：输入一个程序P，A先调用H，如果H返回True，则进入死循环；如果返回False，则退出程序。即A会做出与H的判定相反的做法。伪代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">A</span>(<span class="params">P</span>):</span><br><span class="line">     <span class="keyword">if</span> H(P):</span><br><span class="line">         <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">             <span class="keyword">pass</span></span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">         <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+
+<p>由于程序自身也是数据，所以我们可以将程序A输入程序A，即调用A(A)。程序A开始执行。首先程序A调用H(A)，如果H(A)返回True，那么A进入死循环，矛盾；如果H(A)返回False，那么A退出程序，依然矛盾。</p>
+<p>这种情况下，H总是会给出与正确答案相反的答案，说明H不能总是返回正确答案。H不存在，停机问题无解。</p>
+<hr>
+<p>此问题由<a href="https://baike.baidu.com/item/%E8%89%BE%E4%BC%A6%C2%B7%E9%BA%A6%E5%B8%AD%E6%A3%AE%C2%B7%E5%9B%BE%E7%81%B5">Alan Turing</a>在1963年证明，这个问题同时也指出了图灵机不是任何问题都能解决的。证明过程很精彩，用自己否定了自己，充满了哲学的意味。Paper链接如下（当然我没看过:flushed:）。</p>
+<p><a href="https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf">On Computability Numbers, with an Application to the Entscheidungsproblem.</a></p>
+<p>这类不存在一个正确的算法来解决的问题被成为<strong>不可解问题（Undecidable Decision Problem）</strong>。同样的问题还有<a href="https://baike.baidu.com/item/%E5%80%8D%E7%AB%8B%E6%96%B9%E4%BD%93%E9%97%AE%E9%A2%98"><strong>倍立方体问题</strong></a>，此问题的证明方法感兴趣的可以点击前面的超链接看一看，在此不做赘述。</p>
+<p>结尾懒得想，不写了:stuck_out_tongue:。Bye!</p>
+<p>2018&#x2F;1&#x2F;18 14:13</p>
+]]></content>
+      <categories>
+        <category>高中</category>
+      </categories>
+      <tags>
+        <tag>计算理论</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>“输液瓶”实验</title>
+    <url>/2018/infusion-bottle/</url>
+    <content><![CDATA[<p>在刚刚结束的月考中，有这么一道题：</p>
+<img src="/2018/infusion-bottle/1.jpg" class="" title="题目描述">
+
+<p>当时我做这道题时十分纠结，最后在AD之间选择了D。不出意外，蒙错了。这周末，老闫给我们留了这个实验作为作业，我也很好奇这其中的道理，下面我们来一探究竟。</p>
+<span id="more"></span>
+
+<h1 id="实验设计"><a href="#实验设计" class="headerlink" title="实验设计"></a>实验设计</h1><p>在一节百无聊赖（还差一堆作业没写）的自习课上，我设计了一下我的实验方案，如下：</p>
+<h2 id="实验器材"><a href="#实验器材" class="headerlink" title="实验器材"></a>实验器材</h2><p>矿泉水瓶x2，吸管x2，刻度尺x2。</p>
+<h2 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h2><p>我设计对选项A、C、D三种装置进行实验。</p>
+<p>对于每种装置，实验步骤如下：</p>
+<ol>
+<li>将2把刻度尺固定在合适位置上，分别用于记录水流的水平位移和瓶中水面距离平底的高度。</li>
+<li>将矿泉水瓶注满水。用手堵住吸管口，固定在桌子或其他稳定物体上。</li>
+<li>将手松开，每隔一段时间记录水流的水平位移X和瓶中水面高度H。</li>
+</ol>
+<h1 id="实验开始！"><a href="#实验开始！" class="headerlink" title="实验开始！"></a>实验开始！</h1><p>回到家，二话不说就找出了工具，在矿泉水瓶盖上打好洞，插上吸管。</p>
+<img src="/2018/infusion-bottle/2.jpg" class="">
+
+<p>测试装置</p>
+
+
+<iframe src="//player.bilibili.com/player.html?aid=32334287&cid=56572922&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+
+<p>成功！就是吸管口处有一点儿漏水。本来想用502粘上来着，但家里没有了，又懒得下楼买，所有就凑合着用了。。。</p>
+<p>接下来是最艰难的实验装置组装环节。经过了不断地调整和尝试，我用家里的东西做成了这样一个装置：</p>
+<img src="/2018/infusion-bottle/3.jpg" class="">
+
+<p>很炫酷有木有！<br>至于为什么用市尺，是因为这把尺子刻度较明显，便于记录。</p>
+<p>由于实在没法做到现场记录数据，只能先录好视频，再在电脑上读数并记录。<br>先放视频:</p>
+<h2 id="进气口在水中，低于出水口（题中C选项）"><a href="#进气口在水中，低于出水口（题中C选项）" class="headerlink" title="进气口在水中，低于出水口（题中C选项）"></a>进气口在水中，低于出水口（题中C选项）</h2><p>这个很容易想到结果，仅做定性实验。实验视频如下：</p>
+<iframe src="//player.bilibili.com/player.html?aid=32334287&cid=56573703&page=2" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h2 id="进气口在水中，高于出水口（题中A选项）"><a href="#进气口在水中，高于出水口（题中A选项）" class="headerlink" title="进气口在水中，高于出水口（题中A选项）"></a>进气口在水中，高于出水口（题中A选项）</h2><p>为了减少水的浪费，我把上一次实验流出的水收集到盆中，再灌入瓶中。因为这是物理实验，自然也要用物理的方法了。<br>我们利用虹吸现象将盆中的水移入瓶中：</p>
+<iframe src="//player.bilibili.com/player.html?aid=32334287&cid=56573756&page=3" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<p>完成！下面开始此次实验：</p>
+<iframe src="//player.bilibili.com/player.html?aid=32334287&cid=56573847&page=4" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h2 id="进气口深入瓶中顶端空气部分（题中D选项）"><a href="#进气口深入瓶中顶端空气部分（题中D选项）" class="headerlink" title="进气口深入瓶中顶端空气部分（题中D选项）"></a>进气口深入瓶中顶端空气部分（题中D选项）</h2><p>由于吸管没那么长，伸不到底部。于是我没有用进气管，而是把底给掀了。。。</p>
+<img src="/2018/infusion-bottle/4.jpg" class="">
+<p>虽然有些粗暴，但确实可以等效为D选项的装置。</p>
+<p>这里是相应视频：</p>
+<iframe src="//player.bilibili.com/player.html?aid=32334287&cid=56574078&page=5" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+# 数据记录与处理
+数据记录的方式。。。
+<img src="/2018/infusion-bottle/5.jpg" class="">
+
+<p>这个过程很麻烦。首先要用刻度尺测量每次瓶中水深和水流到达市尺上沿时的水平位移，再通过比例计算出真实数据。</p>
+<p>经过半个多小时的读数和计算，终于得到了实验数据。如下。</p>
+<h3 id="进气口在水中，高于出水口（题中A选项）-1"><a href="#进气口在水中，高于出水口（题中A选项）-1" class="headerlink" title="进气口在水中，高于出水口（题中A选项）"></a>进气口在水中，高于出水口（题中A选项）</h3><table>
+<thead>
+<tr>
+<th>水流的水平位移X(cm)</th>
+<th>水面高度H(cm)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>27.19</td>
+<td>6.31</td>
+</tr>
+<tr>
+<td>22.27</td>
+<td>6.31</td>
+</tr>
+<tr>
+<td>21.40</td>
+<td>6.31</td>
+</tr>
+<tr>
+<td>20.17</td>
+<td>6.31</td>
+</tr>
+<tr>
+<td>19.12</td>
+<td>6.22</td>
+</tr>
+<tr>
+<td>18.77</td>
+<td>6.13</td>
+</tr>
+<tr>
+<td>17.36</td>
+<td>5.78</td>
+</tr>
+<tr>
+<td>16.48</td>
+<td>5.43</td>
+</tr>
+<tr>
+<td>15.78</td>
+<td>5.26</td>
+</tr>
+<tr>
+<td>15.08</td>
+<td>5.17</td>
+</tr>
+<tr>
+<td>14.03</td>
+<td>5.26</td>
+</tr>
+<tr>
+<td>13.15</td>
+<td>5.08</td>
+</tr>
+<tr>
+<td>12.63</td>
+<td>4.91</td>
+</tr>
+<tr>
+<td>12.27</td>
+<td>4.21</td>
+</tr>
+<tr>
+<td>12.10</td>
+<td>2.45</td>
+</tr>
+<tr>
+<td>12.08</td>
+<td>1.40</td>
+</tr>
+<tr>
+<td>11.92</td>
+<td>0.00</td>
+</tr>
+</tbody></table>
+<h3 id="掀开瓶底（题中D选项）"><a href="#掀开瓶底（题中D选项）" class="headerlink" title="掀开瓶底（题中D选项）"></a>掀开瓶底（题中D选项）</h3><table>
+<thead>
+<tr>
+<th>水流的水平位移X(cm)</th>
+<th>水面高度H(cm)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>20.17</td>
+<td>8.77</td>
+</tr>
+<tr>
+<td>17.54</td>
+<td>8.24</td>
+</tr>
+<tr>
+<td>16.66</td>
+<td>8.06</td>
+</tr>
+<tr>
+<td>15.96</td>
+<td>7.89</td>
+</tr>
+<tr>
+<td>15.08</td>
+<td>7.71</td>
+</tr>
+<tr>
+<td>14.03</td>
+<td>7.54</td>
+</tr>
+<tr>
+<td>13.15</td>
+<td>7.27</td>
+</tr>
+<tr>
+<td>12.27</td>
+<td>7.01</td>
+</tr>
+<tr>
+<td>11.40</td>
+<td>6.84</td>
+</tr>
+<tr>
+<td>10.52</td>
+<td>6.66</td>
+</tr>
+<tr>
+<td>10.34</td>
+<td>0.00</td>
+</tr>
+</tbody></table>
+<p>根据平抛运动公式，在下落高度Y一定时，有：<br>$$<br>X&#x3D;vt \ ①<br>$$<br>$$<br>Y&#x3D;\frac 1 2 g t^2 \ ②<br>$$<br>联立①②有：<br>$$<br>v&#x3D;\sqrt {\frac 1 {2gY}} X<br>$$<br>因此$v \propto X$，X的变化情况可以反映v的变化情况。</p>
+<h1 id="实验数据分析"><a href="#实验数据分析" class="headerlink" title="实验数据分析"></a>实验数据分析</h1><p>首先是进气口在水中，高于出水口的情况：</p>
+<img src="/2018/infusion-bottle/6.png" class="">
+
+<p>可以看出，在水面没过进气口时，水流的水平位移X保持不变，说明水流初速度不变。<br>对于图像中水面下降而速度升高的部分，我认为是由于测量误差引起的，且升高仅0.09cm，在正常误差以内。</p>
+<p>接下来是掀开瓶底的情况：</p>
+<img src="/2018/infusion-bottle/7.png" class="">
+
+<p>可以明显看出，随着水面高度下降，水流的水平位移X逐渐下降，说明水流初速度在逐渐减小。</p>
+<p><strong>但为什么是一次函数？</strong><br>这很令我意外。为了解决这个问题，我尝试进行理论上的解释：</p>
+<p>第一次尝试：</p>
+<img src="/2018/infusion-bottle/8.jpg" class="">
+<p>如图，我采用微元法，取$\Delta$H很小的一段时间内流出的水进行研究。由于$\Delta$H很小，可以认为在这段时间内水面高度H不变。流出的水可以等效为从水面取出一层水由重力做功运动到出水口处，根据动能定理$\frac 1 2 mv^2-0&#x3D;mgH$可知，$v \propto \sqrt{H}$，与实验数据矛盾。:confused:</p>
+<p>这是我想到的第一种解释方法，但是无法解释此现象。针对这一问题目前我正在尝试发现问题并作出修改，在有新发现后会进一步完善。</p>
+<p>第二次尝试：<br>我之前的方法存在问题：在很小的一段时间中，重力并非将最高处的水做功至出水口处，故推证错误。<br>下面我采用另一种方式：</p>
+<img src="/2018/infusion-bottle/9.jpg" class="">
+
+<p>如图，取$\Delta$H很小的一段时间内流出的水进行研究。设这段水的质量为$m$，水的密度为$\rho$。根据液体压强公式$P&#x3D; \rho gH$和压强公式$P&#x3D;\frac F S$有，$F_压&#x3D;\rho gHS$。由于$\Delta$H很小，可以认为在这段时间内水面高度H不变。<br>对这段水受力分析可知，其受到重力与水的压力，合外力为$F_合&#x3D;mg+\rho gHS$。设其受力时间为t，由动量定理$F_合t &#x3D; mv-0$得，$v&#x3D;\frac {\rho gSt} {m}H + mgt$，因此$v \propto H$，与实验数据相符。</p>
+<h1 id="实验总结"><a href="#实验总结" class="headerlink" title="实验总结"></a>实验总结</h1><p>本次此次实验验证了本题中装置B不可行，验证了装置A、D的可行性以及装置A的优点和装置D的不足之处。并对装置D的实验结果进行了理论推证。</p>
+]]></content>
+      <categories>
+        <category>高中</category>
+      </categories>
+      <tags>
+        <tag>物理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在CSDN的个人简介中注入URL</title>
+    <url>/2021/insert-url-in-csdn-profile/</url>
+    <content><![CDATA[<p>在CSDN，虽然我不发文章，只是浏览，但看到其他人用心写的文章时往往会与作者互动交流。今日突然想把博客链接放在CSDN主页上，以期望点开我主页的人能够看到我所书写的内容。然而提交时却因简介包含URL而操作失败。垃圾CSDN，简介里放URL都禁止！尝试寻找表单验证的bug，没想到真让我找到了。</p>
+<span id="more"></span>
+
+<h1 id="万恶之源"><a href="#万恶之源" class="headerlink" title="万恶之源"></a>万恶之源</h1><p>一开始，我简单地写入了个人博客与GitHub的链接，单击提交，操作失败（如图绿圈标出）：</p>
+<img src="/2021/insert-url-in-csdn-profile/edit-error.png" class="" title="直接插入链接，操作失败">
+
+<p>一定是CSDN的表单验证搞的鬼。美其名曰安全，实则为了提防我这种让他们损失流量的做法。</p>
+<p>不让我提交实在不爽，反正也交不上去，不如找找表单验证部分有没有漏洞，绕过这步URL过滤。</p>
+<h1 id="稍作尝试"><a href="#稍作尝试" class="headerlink" title="稍作尝试"></a>稍作尝试</h1><p>首先尝试一下最基本的HTML注入攻击。对于这种简单的注入，CSDN肯定能挡住。不出意外地，代码被转译了：</p>
+<img src="/2021/insert-url-in-csdn-profile/html-insert-failed.png" class="" title="HTML被转译">
+
+<p>于是我突发奇想：<strong>表单验证的过程中，一段文字被转译了，会不会就不再验证其中是否存在URL了呢？</strong></p>
+<p>随尝试向简介中写入一个a标签：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;https://blog.jiabh.cn&quot;</span>&gt;</span>我的博客<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<img src="/2021/insert-url-in-csdn-profile/insert-url.png" class="" title="利用HTML转译插入URL">
+
+<p>真的成功了！通过利用HTML转译后不再进行URL过滤的bug，成功写入了链接。</p>
+<p>接下来就简单了，主要是对格式进行一下美化。毕竟有标签结构的存在，多少会影响到观感。尝试了几种格式后，我选择了下面这一种格式：</p>
+<img src="/2021/insert-url-in-csdn-profile/final.png" class="" title="最终效果">
+
+<p>虽然格式四不像，但URL写进去就行了，毕竟这东西是纯粹给人看的，人看得舒服是第一位。</p>
+<p>至此，我成功将个人链接写入了简介里。点击来的人至少不会望着这白茫茫的一片，扫兴地关闭了。</p>
+<img src="/2021/insert-url-in-csdn-profile/csdn-homepage.png" class="" title="我空荡荡的CSDN主页">
+]]></content>
+      <tags>
+        <tag>抖机灵</tag>
+        <tag>黑客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ren&#39;Py 8.0.0 发布</title>
+    <url>/2022/renpy8-released/</url>
+    <content><![CDATA[<img src="/2022/renpy8-released/renpy8_lores.png" class="" title="Ren" alt="Py 8 Release Logo">
+
+<p>2022年6月26日，知名视觉小说引擎<a href="https://www.renpy.org/">Ren’Py</a>发布大版本更新8.0.0。在发布之前，我很期待这个版本，其中最吸引我的更改是Python版本由2升3，终于抛弃早已停止更新的2.x版本。下面对几个重大更新进行整理，全部更改可见官方<a href="https://www.renpy.org/doc/html/changelog.html#renpy-8-0-0">Changelog</a>。</p>
+<span id="more"></span>
+
+<h1 id="Python-3支持"><a href="#Python-3支持" class="headerlink" title="Python 3支持"></a>Python 3支持</h1><p>Ren’Py 7.x及之前均运行在Python 2上；自8.0.0开始，<a href="https://www.renpy.org/doc/html/changelog.html#python-3-support-ren-py-8-0">Ren’Py转至Python 3</a>。特别地，Ren’Py 8.0使用Python 3.9.10。这意味着Ren’Py项目将可以使用标注（annotation）、格式化字符串常量（f-string）等重要功能，为视觉小说的实现带来很多便利。</p>
+<h1 id="支持的平台更改"><a href="#支持的平台更改" class="headerlink" title="支持的平台更改"></a>支持的平台更改</h1><ul>
+<li><p>新增64-bit ARM Linux支持</p>
+</li>
+<li><p>不再支持32-bit x86 Windows和Linux</p>
+</li>
+</ul>
+<p>官方称这一更新是由于32-bit x86已经过时。对此我有相同的感觉，但没有发现数据做支持，也就无从探究这一变更对VN开发的影响。</p>
+<h1 id="暂时移除Web平台的支持"><a href="#暂时移除Web平台的支持" class="headerlink" title="暂时移除Web平台的支持"></a>暂时移除Web平台的支持</h1><p>Ren’Py 8.0暂时移除对Web平台的支持，将在近几个版本恢复。</p>
+<h1 id="7-x、8-x并存"><a href="#7-x、8-x并存" class="headerlink" title="7.x、8.x并存"></a>7.x、8.x并存</h1><p>Ren’Py 8是一个大版本更新，因此Ren’Py将采用8.0和7.5并行开发的方式进行过渡。Tom称这是为了等待已有游戏完成开发，新项目全部建议基于Ren’Py 8开发。</p>
+<h1 id="8-x版本号与Python版本号的关系"><a href="#8-x版本号与Python版本号的关系" class="headerlink" title="8.x版本号与Python版本号的关系"></a>8.x版本号与Python版本号的关系</h1><p>Ren’Py 8.0.0开始，Python版本将随Ren’Py子版本号的更新而更新，不过似乎没有明确表示子版本号和python版本的关系。但可以肯定的是，Ren’Py底层的Python将不再像以前那样一成不变，而将跟随Python更新的脚步。（这一部分是几天前从Lemma Soft Forums上看到的，但找不到出处了）</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://www.renpy.org/release/8.0.0">Ren’Py 8.0.0 “Heck Freezes Over”</a></p>
+<p><a href="https://www.renpy.org/doc/html/changelog.html#renpy-8-0-0">Ren’Py 8.0.0 Changelog</a></p>
+]]></content>
+      <categories>
+        <category>VN Engine</category>
+      </categories>
+      <tags>
+        <tag>Ren&#39;Py</tag>
+        <tag>News</tag>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在云服务器上部署python项目</title>
+    <url>/2020/deploy-python-flask-project-on-server/</url>
+    <content><![CDATA[<p>前不久，我开发了一个python web项目，一直在自己的电脑上跑。这样本没有什么问题，但由于电脑需要24小时开启并联网，它或多或少在生活中还是给我带来了一些不便。于是我购买了一台云服务器，把它部署在上边。</p>
+<span id="more"></span>
+
+<p>项目依赖：python3.7，MySQL 8.0</p>
+<p>操作系统：本地win10，云服务器Ubuntu Server 18 LTS</p>
+<h1 id="部署过程"><a href="#部署过程" class="headerlink" title="部署过程"></a>部署过程</h1><p>部署主要分为三步：首先把本地的项目文件发送到服务器上，然后在服务器配置好运行环境，最后在服务器运行起服务。</p>
+<h2 id="发送项目相关文件到服务器"><a href="#发送项目相关文件到服务器" class="headerlink" title="发送项目相关文件到服务器"></a>发送项目相关文件到服务器</h2><p>首先简要介绍<code>scp</code>命令：</p>
+<p>cp —— 在同一台电脑上、不同的目录之间copy文件。不能跨机拷贝。</p>
+<p>scp —— secure copy的简写，用于远程拷贝文件。基于ssh登录进行加密传输。</p>
+<p>复制<strong>本地</strong>文件到<strong>远程机器</strong>指定目录（如果复制目录，加上参数 -r ）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">scp -rp /path/filename username@remoteIP:/path</span><br></pre></td></tr></table></figure>
+<p>复制<strong>远程机器</strong>文件到<strong>本地</strong>指定目录：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scp -rp username@remoteIP:/path/filename /path</span><br></pre></td></tr></table></figure>
+
+
+
+<p>通过scp命令，便可以在本地与服务器之间自由地传输文件。将项目相关的文件全部发送至云服务器即可。</p>
+<h2 id="在服务器配置python环境"><a href="#在服务器配置python环境" class="headerlink" title="在服务器配置python环境"></a>在服务器配置python环境</h2><p>为了方便管理项目，需要先在服务器创建一个独立的python环境。我这里使用<code>virtualenv</code>。</p>
+<h3 id="安装virtualenv"><a href="#安装virtualenv" class="headerlink" title="安装virtualenv"></a>安装virtualenv</h3><p>直接使用<code>pip</code>工具安装即可。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install virtualenv</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="创建新的python环境"><a href="#创建新的python环境" class="headerlink" title="创建新的python环境"></a>创建新的python环境</h3><p>通过virtualenv创建的环境将独立地存在于指定的一个文件夹中。</p>
+<p>我需要新建一个python3.7的环境，因此，cd到目标目录下，执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">virtualenv TEST --python=python3.7</span><br></pre></td></tr></table></figure>
+
+<p>执行完毕，就会在当前目录下出现一个TEST文件夹，里面存放着这整个环境。</p>
+<h3 id="安装项目依赖的包"><a href="#安装项目依赖的包" class="headerlink" title="安装项目依赖的包"></a>安装项目依赖的包</h3><p>由于我的项目依赖的包全部可以从pip安装，因此只需要先在本地生成requirements.txt，然后在服务器上导入，安装十分方便。</p>
+<p>生成本地包环境至requirements.txt文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip freeze &gt; requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p>根据requirements.txt文件进行包安装：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+
+
+<p>先在本地环境中运行生成requirements.txt文件，然后将requirements.txt上传至服务器，最后在刚刚使用virtualenv创建的python环境下进行包安装，即可自动下载安装项目所依赖的包。如此，完美迁移项目运行环境。</p>
+<h2 id="在服务器上配置MySQL"><a href="#在服务器上配置MySQL" class="headerlink" title="在服务器上配置MySQL"></a>在服务器上配置MySQL</h2><h3 id="安装MySQL"><a href="#安装MySQL" class="headerlink" title="安装MySQL"></a>安装MySQL</h3><p>我这里直接使用 <code>apt install mysql-server</code> 在服务器上安装MySQL。注意这个命令默认安装的是MySQL 5.7，而我本地使用的是MySQL 8.0。我在服务器上配置好后才发现这个问题，不过由于程序仍然可以运行，就没有再改。之后会考虑重新安装并配置MySQL 8.0。</p>
+<h3 id="设置密码"><a href="#设置密码" class="headerlink" title="设置密码"></a>设置密码</h3><p>MySQL 5.7的安装过程中没有要求输入root密码，但安装后登录mysql时又要求输入密码，这是MySQL 5.7的一个坑点。在第一次登录前需要使用 <code>mysqladmin</code> 命令设置root密码（例如设置密码为123456）：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mysqladmin -u root password 123456</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="迁移本地MySQL数据库至服务器"><a href="#迁移本地MySQL数据库至服务器" class="headerlink" title="迁移本地MySQL数据库至服务器"></a>迁移本地MySQL数据库至服务器</h3><p>迁移数据库需要三个步骤：</p>
+<p>1、使用 <code>mysqldump</code> 命令导出本地数据库的全部数据至一个.sql文件。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysqldump -u root -p db_name &gt; C:\path\filename.sql</span><br></pre></td></tr></table></figure>
+
+<p>执行命令，输入密码后即可在相应路径下找到filename.sql文件。</p>
+<p>2、创建一个新的数据库。</p>
+<p>登录到服务器上的MySQL数据库root账户，用 <code>CREATE DATABASE db_name;</code> 创建名为db_name的数据库。</p>
+<p>3、将.sql文件发送到服务器上并导入db_name数据库。</p>
+<p>仍然使用scp命令发送至服务器。导入数据库的命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysql -u root -p db_name &lt; C:\path\filename.sql</span><br></pre></td></tr></table></figure>
+
+<p>输入密码后，数据库导入成功。</p>
+<h2 id="在服务器上长时间运行程序"><a href="#在服务器上长时间运行程序" class="headerlink" title="在服务器上长时间运行程序"></a>在服务器上长时间运行程序</h2><p>为了让程序不会在我们与服务器断开连接后自动停止，需要让程序在后台运行。可以选择nohup，不过我这里使用Linux上强大的终端复用工具tmux。</p>
+<h3 id="tmux-简介"><a href="#tmux-简介" class="headerlink" title="tmux 简介"></a>tmux 简介</h3><p>tmux 这一名字来源于终端（terminal）复用器（muxer），它可以将一个终端会话分成多个会话。与nohup不同，tmux不仅仅在后台创造一个进程来运行指定命令，而是创造了一个进程来运行终端会话，并让命令在此终端中运行。这个会话可以被接入和断开，并且在断开后仍然保持运行，直到会话被终止。</p>
+<h3 id="tmux-简单使用"><a href="#tmux-简单使用" class="headerlink" title="tmux 简单使用"></a>tmux 简单使用</h3><p>使用下面的命令即可创造一个名为session-name的会话：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tmux new -s session-name</span><br></pre></td></tr></table></figure>
+
+<p>管理终端会话的相关命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tmux ls  # 显示当前所有的会话</span><br><span class="line"></span><br><span class="line">tmux a  # 接入第一个可用的会话</span><br><span class="line">tmux a -t session-name  # 接入名为session-name的会话</span><br><span class="line"></span><br><span class="line">tmux detach  # 断开当前接入的会话（会话仍然运行）</span><br><span class="line"></span><br><span class="line">tmux kill-session -t session-name  # 杀死名为session-name的会话（会话终止）</span><br></pre></td></tr></table></figure>
+
+<p>如果想要在会话进程阻塞的情况下断开会话，可以先按下 Ctrl+b，然后按 d 即可断开连接。</p>
+<p>使用 tmux 创建一个新的会话，并在这个会话中运行需要部署的python程序，然后断开连接，服务便可以一直运行下去。</p>
+<h1 id="后续配置"><a href="#后续配置" class="headerlink" title="后续配置"></a>后续配置</h1><p>至此，项目已经成功部署到云服务器上。为了后续维护方便，我又进行了一些配置。</p>
+<h2 id="MySQL开启远程访问"><a href="#MySQL开启远程访问" class="headerlink" title="MySQL开启远程访问"></a>MySQL开启远程访问</h2><p>默认情况下，MySQL数据库至可以在本地访问，无法远程访问。为了便于管理服务器上的数据，我开启了远程访问的功能。</p>
+<h3 id="打开3306端口"><a href="#打开3306端口" class="headerlink" title="打开3306端口"></a>打开3306端口</h3><p>首先打开位于&#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;目录下的mysqld.cnf，然后用#号注释掉bind-address &#x3D; 127.0.0.1那一行，从而关闭127.0.0.1对3306端口的占用。</p>
+<img src="/2020/deploy-python-flask-project-on-server/1.png" class="">
+
+<p>在使用 <code>service mysql restart</code> 重启mysql服务后，3306就不再被占用。</p>
+<h3 id="给MySQL添加授权远程访问的账户"><a href="#给MySQL添加授权远程访问的账户" class="headerlink" title="给MySQL添加授权远程访问的账户"></a>给MySQL添加授权远程访问的账户</h3><p>登录mysql，然后执行如下命令即可添加一个可以由所有IP（’%’代表所有IP，也可以指定）远程访问的root账户：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grant all privileges on *.* TO &#x27;root&#x27;@&#x27;%&#x27; identified by &#x27;密码&#x27; with grant option;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+
+<p>执行过后，可以打开mysql数据库下的user表中确认：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">use mysql;</span><br><span class="line">select host, user from user;</span><br></pre></td></tr></table></figure>
+
+<p>如果有host值为%、user值为root的一行，则说明添加成功。如此便可以远程登录mysql。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://www.zhihu.com/question/351415307/answer/862575956">pycharm安装了很多第三方库能不能直接导出到第二台电脑,不然换台电脑又是下载半天必用的库? - 程序员小贤的回答 - 知乎</a></p>
+<p><a href="https://yq.aliyun.com/articles/187420">Linux下使用tmux打造更强大的终端</a></p>
+<p><a href="https://blog.csdn.net/MAOJG/article/details/79018764">在服务器上长时间运行程序的一些基本命令</a></p>
+<p><a href="https://www.cnblogs.com/young233/p/10829000.html">mysql远程登陆</a></p>
+<p><a href="https://blog.csdn.net/ding_312/article/details/81023483">MySQL在腾讯云中设置开启3306端口</a></p>
+<p><a href="https://blog.csdn.net/Session_XQQ/article/details/78998798">如何使用DataGrip导出整个数据库到一个.sql文件</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>云服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>将GitHub默认分支名由main更换回master</title>
+    <url>/2021/rename-branch-from-main-to-master/</url>
+    <content><![CDATA[<p>完成软件构造课程的实验时，我在指导手册中看到如下的一段话：</p>
+<blockquote>
+<p>提交到 GitHub 仓库后，TA 会读取你的 master 分支。如果你在其他分支上开发，提交前请务必将最新修改合并至 master 分支。如果实验要求你设置其他分支，也请务必将各分支指向正确的 commit，TA 根据分支名来获取你的代码。</p>
+</blockquote>
+<p>然而，GitHub在2020年宣布开始逐步将默认分支名由 <code>master</code> 更改为 <code>main</code>，该项目的官方仓库如下：<a href="https://github.com/github/renaming">Renaming the default branch from master</a>。现在，在GitHub上创建的新仓库的默认分支名称为 <code>main</code>。遂向老师确认是否需要将默认分支修改回 <code>master</code>，得到了肯定的答案（<a href="https://piazza.com/class/kk0jwlevju3nd?cid=9">Piazza问题链接</a>）。</p>
+<p>本文记录将默认分支由 <code>main</code> 分支修改为 <code>master</code> 的全过程。</p>
+<span id="more"></span>
+
+<p>首先展示一下我当前仓库的分支，执行命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -a  <span class="comment"># -a表示列出所有分支，包括本地分支和远程分支</span></span><br></pre></td></tr></table></figure>
+
+<img src="/2021/rename-branch-from-main-to-master/original-branches.png" class="" title="列出所有分支">
+
+<p>即本地和远程仓库都只有一个main分支。此时我已经进行了部分commit和push，故不能简单地在GitHub页面上更改。总地来说，需要进行以下几步：</p>
+<ol>
+<li><p>将本地的 <code>main</code> 分支更名为 <code>master</code></p>
+</li>
+<li><p>将本地的 <code>master</code> 分支push到远程仓库</p>
+</li>
+<li><p>在GitHub上将默认分支修改为 <code>master</code></p>
+</li>
+<li><p>删除远程的 <code>main</code> 分支</p>
+</li>
+</ol>
+<h1 id="将本地的-main-分支更名为-master"><a href="#将本地的-main-分支更名为-master" class="headerlink" title="将本地的 main 分支更名为 master"></a>将本地的 <code>main</code> 分支更名为 <code>master</code></h1><p>在Git命令中，修改分支名的操作为：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -m old_name new_name</span><br></pre></td></tr></table></figure>
+
+<p>因此，执行一条Git命令即可：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -m main master</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/rename-branch-from-main-to-master/rename-local-branch.png" class="" title="更名本地分支">
+
+<h1 id="将本地的-master-分支push到远程仓库"><a href="#将本地的-master-分支push到远程仓库" class="headerlink" title="将本地的 master 分支push到远程仓库"></a>将本地的 <code>master</code> 分支push到远程仓库</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+
+<p>push结束后，再次查看分支，可以看到远程仓库已经有两个分支：<code>main</code> 和 <code>master</code>：</p>
+<img src="/2021/rename-branch-from-main-to-master/two-remote-branches.png" class="" title="远程仓库的两个分支">
+
+<p>打开GitHub仓库页，从红框所示部分也可以看到：</p>
+<img src="/2021/rename-branch-from-main-to-master/two-remote-branches-on-web.png" class="" title="远程仓库的两个分支">
+
+<h1 id="在GitHub上将默认分支修改为-master"><a href="#在GitHub上将默认分支修改为-master" class="headerlink" title="在GitHub上将默认分支修改为 master"></a>在GitHub上将默认分支修改为 <code>master</code></h1><p>在仓库页单击Settings -&gt; Branches，在Default branch一栏将会看到当前的默认分支，即 <code>main</code> 分支。如下图所示，单击右侧的 ⇌ 按钮，选择默认分支为 <code>master</code> 分支后单击Update，就在GitHub上完成了默认分支的修改。</p>
+<img src="/2021/rename-branch-from-main-to-master/switch-default-branch-on-gh.png" class="" title="在GitHub上修改仓库的默认分支">
+
+<h1 id="删除远程的-main-分支"><a href="#删除远程的-main-分支" class="headerlink" title="删除远程的 main 分支"></a>删除远程的 <code>main</code> 分支</h1><p>此时 <code>master</code> 分支已经设置完毕，但远程还有一个没用的 <code>main</code> 分支需要删除。执行push操作，删除远程的 <code>main</code> 分支：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git push --delete origin main</span><br></pre></td></tr></table></figure>
+
+<p>再次列出分支，发现远程的 <code>main</code> 分支已消失，同样在GitHub上也可以看到只剩下了一个 <code>master</code> 分支。</p>
+<img src="/2021/rename-branch-from-main-to-master/rename-finished.png" class="" title="远程仓库只剩下了一个master分支">
+
+<img src="/2021/rename-branch-from-main-to-master/only-master-on-gh.png" class="" title="远程仓库只剩下了一个master分支">
+
+<p>至此，本地和远程仓库的默认分支均由 <code>main</code> 更换为  <code>master</code> 。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://www.jianshu.com/p/cc740394faf5">git修改分支名称 - 简书</a></p>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>Git</tag>
+        <tag>软件构造</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>什么是“Python之禅”？</title>
+    <url>/2018/zen-of-python/</url>
+    <content><![CDATA[<p>第一次写博客，还没想好写点儿什么，就来讲讲这个吧。</p>
+<span id="more"></span>
+
+<hr>
+<h1 id="什么是“Python之禅”？"><a href="#什么是“Python之禅”？" class="headerlink" title="什么是“Python之禅”？"></a>什么是“Python之禅”？</h1><p>Python之禅（The Zen of Python）是由Tim Peters提出的20行Python设计哲学，其中的19行在PEP20被加入到Python中。打开Python解释器，输入：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> this</span><br></pre></td></tr></table></figure>
+
+<p>就会输出如下的文字：</p>
+<blockquote>
+<p>Beautiful is better than ugly.<br>Explicit is better than implicit.<br>Simple is better than complex.<br>Complex is better than complicated.<br>Flat is better than nested.<br>Sparse is better than dense.<br>Readability counts.<br>Special cases aren’t special enough to break the rules.<br>Although practicality beats purity.<br>Errors should never pass silently.<br>Unless explicitly silenced.<br>In the face of ambiguity, refuse the temptation to guess.<br>There should be one– and preferably only one –obvious way to do it.<br>Although that way may not be obvious at first unless you’re Dutch.<br>Now is better than never.<br>Although never is often better than *right* now.<br>If the implementation is hard to explain, it’s a bad idea.<br>If the implementation is easy to explain, it may be a good idea.<br>Namespaces are one honking great idea – let’s do more of those!</p>
+</blockquote>
+<p>翻译如下（来源找不到了）：</p>
+<blockquote>
+<p>优美胜于丑陋（Python 以编写优美的代码为目标）<br>明了胜于晦涩（优美的代码应当是明了的，命名规范，风格相似）<br>简洁胜于复杂（优美的代码应当是简洁的，不要有复杂的内部实现）<br>复杂胜于凌乱（如果复杂不可避免，那代码间也不能有难懂的关系，要保持接口简洁）<br>扁平胜于嵌套（优美的代码应当是扁平的，不能有太多的嵌套）<br>间隔胜于紧凑（优美的代码有适当的间隔，不要奢望一行代码解决问题）<br>可读性很重要（优美的代码是可读的）<br>即便假借特例的实用性之名，也不可违背这些规则（这些规则至高无上）<br>不要包容所有错误，除非你确定需要这样做（精准地捕获异常，不写 except:pass 风格的代码）<br>当存在多种可能，不要尝试去猜测<br>而是尽量找一种，最好是唯一一种明显的解决方案（如果不确定，就用穷举法）<br>虽然这并不容易，因为你不是 Python 之父（这里的 Dutch 是指 Guido ）<br>做也许好过不做，但不假思索就动手还不如不做（动手之前要细思量）<br>如果你无法向人描述你的方案，那肯定不是一个好方案；反之亦然（方案测评标准）<br>命名空间是一种绝妙的理念，我们应当多加利用（倡导与号召）</p>
+</blockquote>
+<p>让我们再来看看它的源代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = <span class="string">&quot;&quot;&quot;Gur Mra bs Clguba, ol Gvz Crgref</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Ornhgvshy vf orggre guna htyl.</span></span><br><span class="line"><span class="string">Rkcyvpvg vf orggre guna vzcyvpvg.</span></span><br><span class="line"><span class="string">Fvzcyr vf orggre guna pbzcyrk.</span></span><br><span class="line"><span class="string">Pbzcyrk vf orggre guna pbzcyvpngrq.</span></span><br><span class="line"><span class="string">Syng vf orggre guna arfgrq.</span></span><br><span class="line"><span class="string">Fcnefr vf orggre guna qrafr.</span></span><br><span class="line"><span class="string">Ernqnovyvgl pbhagf.</span></span><br><span class="line"><span class="string">Fcrpvny pnfrf nera&#x27;g fcrpvny rabhtu gb oernx gur ehyrf.</span></span><br><span class="line"><span class="string">Nygubhtu cenpgvpnyvgl orngf chevgl.</span></span><br><span class="line"><span class="string">Reebef fubhyq arire cnff fvyragyl.</span></span><br><span class="line"><span class="string">Hayrff rkcyvpvgyl fvyraprq.</span></span><br><span class="line"><span class="string">Va gur snpr bs nzovthvgl, ershfr gur grzcgngvba gb thrff.</span></span><br><span class="line"><span class="string">Gurer fubhyq or bar-- naq cersrenoyl bayl bar --boivbhf jnl gb qb vg.</span></span><br><span class="line"><span class="string">Nygubhtu gung jnl znl abg or boivbhf ng svefg hayrff lbh&#x27;er Qhgpu.</span></span><br><span class="line"><span class="string">Abj vf orggre guna arire.</span></span><br><span class="line"><span class="string">Nygubhtu arire vf bsgra orggre guna *evtug* abj.</span></span><br><span class="line"><span class="string">Vs gur vzcyrzragngvba vf uneq gb rkcynva, vg&#x27;f n onq vqrn.</span></span><br><span class="line"><span class="string">Vs gur vzcyrzragngvba vf rnfl gb rkcynva, vg znl or n tbbq vqrn.</span></span><br><span class="line"><span class="string">Anzrfcnprf ner bar ubaxvat terng vqrn -- yrg&#x27;f qb zber bs gubfr!&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">d = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> (<span class="number">65</span>, <span class="number">97</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">26</span>):</span><br><span class="line">        d[<span class="built_in">chr</span>(i+c)] = <span class="built_in">chr</span>((i+<span class="number">13</span>) % <span class="number">26</span> + c)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;&quot;</span>.join([d.get(c, c) <span class="keyword">for</span> c <span class="keyword">in</span> s]))</span><br></pre></td></tr></table></figure>
+
+<p>我想所有人看了都会说，<strong>这是什么玩意儿啊！</strong><br>这似乎是Tim Peters向我们举出的典型反例……</p>
+<p>那么，这坨东西是怎么变成这19句经典的Python哲学的呢？</p>
+<p>其实，这背后用的是恺撒加密的一种：ROT-13加密。</p>
+<hr>
+<h1 id="什么是恺撒加密？"><a href="#什么是恺撒加密？" class="headerlink" title="什么是恺撒加密？"></a>什么是恺撒加密？</h1><p>凯撒加密是密码学中最为简单的加密技术，其原理如下：</p>
+<p><img src="/img/1/1.1.png"></p>
+<p>如图，在加密过程中，对于明文中的每一个字符，都转换成它偏移4个单位后对应的字符，例如A会转换成E。对于后面的XYZ等字符，则从A开始继续转换，例如Z会转换成D。对明文中所有字符进行转换，即可得到密文。其中“4”被称为偏移量。对于任意一段密文，只需要得到对应的偏移量，即可得到明文。</p>
+<p>至于ROT-13，其实就是偏移量取13时的恺撒加密。可是，为什么它这么特殊，要单拿出来？</p>
+<p>其实，ROT-13最初被1980年代早期的net.jokes新闻群组所使用，它用于隐藏某些可能侮辱到特定读者的笑话、隐晦某个谜题的答案或八卦性的内容。因为这个算法两次加密即可得到明文，加密与解密算法相同，比较方便，他们就选择了这个。正因为这个特性，出现了如“2ROT-13”、“ROT-26”这样调侃的术语。</p>
+<p>我们可以看出，这种加密方式非常容易被破解，因此如今它已经退出密码的舞台，只能作为最经典的加密方式之一供我们学习。</p>
+<hr>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>正是Python这样优雅的设计理念，使得Python代码能够如此简洁，使得Python程序的编写效率远高于大多数语言，同时也使得Python成为最适合入门学习的编程语言之一。这19条理念，是每一个Pythoner都应该遵守的设计原则。</p>
+<p>2018&#x2F;9&#x2F;16 22:44</p>
+]]></content>
+      <categories>
+        <category>高中</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+</search>

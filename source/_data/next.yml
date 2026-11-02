@@ -12,11 +12,11 @@ menu:
   rss: /atom.xml || fa fa-rss
 
 avatar:
-  url: https://avatars.githubusercontent.com/u/23132866
+  url: https://github.com/old6ix.png
 
 social:
-  GitHub: https://github.com/jiabh || fab fa-github
-  E-Mail: mailto:hitjbh@outlook.com || fa fa-envelope
+  GitHub: https://github.com/old6ix || fab fa-github
+  E-Mail: mailto:old6ix@duck.com || fa fa-envelope
 
 codeblock:
   copy_button:

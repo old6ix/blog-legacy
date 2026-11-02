@@ -7,9 +7,9 @@ title: jiabh的博客
 subtitle: 在路上
 #description: ''
 keywords:
-author: jiabh
+author: old6ix
 language: zh-CN
-timezone: Asia/Shanghai
+timezone: Asia/Singapore
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
@@ -106,8 +106,10 @@ theme: next
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
 - type: git
-  repo: git@github.com:jiabh/blog.git
+  repo: gh-jiabh:old6ix/blog-legacy.git
   branch: gh-pages
+  name: old6ix
+  email: old6ix@duck.com
 
 search:
   path: search.xml

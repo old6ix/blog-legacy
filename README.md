@@ -2,6 +2,21 @@
 
 Hexo 6.3.0 博客，使用 NexT 7.8.0 的 Pisces 布局。
 
+## 仓库信息
+
+- GitHub 用户名和作者：`old6ix`
+- 联系邮箱：`old6ix@duck.com`
+- 源码推送和 Hexo 部署地址：`gh-jiabh:old6ix/blog-legacy.git`
+- 源码分支：`master`；静态页面部署分支：`gh-pages`
+
+`gh-jiabh` 是本机 SSH 配置中的主机别名，其他机器需配置对应的 SSH 密钥和别名。
+Git 提交身份属于本地配置，重新克隆后可在项目根目录执行：
+
+```powershell
+git config --local user.name old6ix
+git config --local user.email old6ix@duck.com
+```
+
 ## 初始化与运行
 
 在项目根目录执行：

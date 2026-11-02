@@ -1,3 +1,4 @@
+https://blog.jiabh.cn/2026/start-writing-again/
 https://blog.jiabh.cn/categories/
 https://blog.jiabh.cn/tags/
 https://blog.jiabh.cn/about/
@@ -24,7 +25,10 @@ https://blog.jiabh.cn/tags/%E7%89%A9%E7%90%86/
 https://blog.jiabh.cn/tags/%E8%AE%A1%E7%AE%97%E7%90%86%E8%AE%BA/
 https://blog.jiabh.cn/tags/Ren-Py/
 https://blog.jiabh.cn/tags/News/
+https://blog.jiabh.cn/tags/AI/
+https://blog.jiabh.cn/tags/%E5%86%99%E4%BD%9C/
 https://blog.jiabh.cn/categories/Git/
 https://blog.jiabh.cn/categories/Python/
 https://blog.jiabh.cn/categories/%E9%AB%98%E4%B8%AD/
 https://blog.jiabh.cn/categories/VN-Engine/
+https://blog.jiabh.cn/categories/%E9%9A%8F%E7%AC%94/

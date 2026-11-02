@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.jiabh.cn/2026/start-writing-again/</loc>
+    
+    <lastmod>2026-11-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.jiabh.cn/categories/</loc>
     
     <lastmod>2026-11-02</lastmod>
@@ -209,6 +218,20 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://blog.jiabh.cn/tags/AI/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.jiabh.cn/tags/%E5%86%99%E4%BD%9C/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
@@ -234,6 +257,13 @@
   
   <url>
     <loc>https://blog.jiabh.cn/categories/VN-Engine/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.jiabh.cn/categories/%E9%9A%8F%E7%AC%94/</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
